@@ -1,0 +1,27 @@
+<div class="card
+col-8 col-sm-5 col-lg-3 col-xl col-xxl
+mx-2
+py-2 px-4
+rounded-3
+bg-light-subtle
+
+text-dark">
+    <div class="container d-flex justify-content-around align-items-center
+                pt-3
+                mx-3
+                ">
+        <p>{{pokeid}}</p>
+        <p>{{pokename}}</p>
+    </div>
+    <img src="{{pokesprite}}" alt="img">
+    <div class="container d-flex justify-content-around align-items-center
+                pt-3
+                ">
+        <p>{{type1}}</p>
+        {{#if multitype}}
+            <p>{{type2}}</p>
+        {{/if}}
+    </div>
+</div>
+
+

@@ -1,0 +1,46 @@
+<!-- base pokecard container -->
+<div class="card
+
+mx-2 my-3
+p-1
+rounded-3
+bg-light-subtle
+d-flex justify-content-center align-items-center
+text-dark
+flex-shrink-0">
+    <!-- base id + name container -->
+    <div class="container d-flex py-2 rounded-top-3 bg-danger-subtle justify-content-start mx-0 " >
+        <!-- outer id container -->
+        <div class="d-flex justify-content-start align-items-center rounded-5 bg-dark-subtle  mx-0">
+            <!-- inner id container -->
+            <div class="container">
+                {{pokeid}}
+            </div>
+        </div>
+        <!-- inner name container -->
+        <div class="container">
+            {{pokename}}
+        </div>
+    </div>
+    <!-- sprite image container -->
+    <div class="px-5 py-2">
+        <img src="{{pokesprite}}" alt="{{pokename}}" width="150px" height="150px" class="m-5"/>
+    </div>
+    <!-- type1 + type2 container -->
+    <div class="container-fluid d-flex justify-content-center align-items-center m-3 mt-0 mx-5">
+        <!-- inner type2 container -->
+        {{#if multitype}}
+            <div class="container bg-primary-subtle col-6 ">
+                <div class="text-center col-12">{{poketype1}}</div>
+            </div>
+            <!-- inner type2 container -->
+            <div class="container bg-success-subtle col-6 me-1">
+                <div class="text-center col-12">{{poketype2}}</div>
+            </div>
+        {{else}}
+            <div class="container bg-primary-subtle col-6 mx-5 rounded">
+                <div class="text-center col-12">{{poketype1}}</div>
+            </div>
+        {{/if}}
+    </div>
+</div>
