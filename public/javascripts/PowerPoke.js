@@ -52,14 +52,14 @@ class PowerPoke {
    * @param initResp - Response from the initial call to get the length of the results
    * @return {Promise<*[]>} - Array of 10 random Pokemon objs
    */
-  async get10RandomPokeURLFromInitialFetch(initResp) {
+  async get8RandomPokeURLFromInitialFetch(initResp) {
     // console.log('=======================');
     // console.log(initResp);
     // console.log('=======================');
     const rndmPokes = [];
     try {
       // 10 times to generate 10 Pokemon
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 8; i++) {
         // const randomNum = Math.floor(Math.random() * initResp.results.length); // generate random number is within the resultset
         const randomNum = Math.floor(Math.random() * initResp.pokemon_species.length); // generate random number is within the resultset
         let randPokeURL = initResp.pokemon_species[randomNum].url;// select the URL of the pokemon in the resultset with the random number
@@ -81,7 +81,7 @@ class PowerPoke {
     }
     return rndmPokes;
   }
-  async getFirst20PokeURLFromInitFetch(initResp) {
+  async getFirst20PokeURLFromInitFetch() {
     const poke20List = [];
     try {
       let pokeStartNum = 1;

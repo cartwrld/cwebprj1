@@ -9,7 +9,30 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-        "new-cap": "off",
-        "max-len": "off"
+        "max-len": [
+            "error",
+            {
+                "code": 120,
+                "tabWidth": 2,
+                "ignoreComments": true,
+                "ignoreUrls": true
+            }
+        ],
+        "require-jsdoc": [
+            "error",
+            {
+                "require": {
+                    "FunctionDeclaration": false,
+                    "MethodDefinition": false,
+                    "ClassDeclaration": false
+                }
+            }
+        ],
+        "new-cap": [
+            "error",
+            {
+                "capIsNew": false
+            }
+        ]
     }
 }

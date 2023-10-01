@@ -9,7 +9,7 @@ async function generate10RandomHomePagePokemon() {
   const initList = await pp.getPokemonByGeneration(1);
   let x;
   const randomHomePokes = async () => {
-    x = await pp.get10RandomPokeURLFromInitialFetch(initList);
+    x = await pp.get8RandomPokeURLFromInitialFetch(initList);
     return x;
   };
   return randomHomePokes();
@@ -45,10 +45,10 @@ router.get('/', async function(req, res, next) {
   await outputInfo();
 
   res.render('index', {
-    title: 'PokeDex',
+
     path: 'https://www.pngkit.com/png/full/783-7831178_pokeball-pokeball-pixel-png.png',
     cards: displayPokes,
-
+    homepage: true,
   });
 });
 

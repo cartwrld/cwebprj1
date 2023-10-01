@@ -1,13 +1,18 @@
-<!-- base pokecard container -->
+<!-- base pokecard container col-8 col-sm-5 col-lg-3 col-xl-2 col-xxl-3-->
+
 <div class="card
 
 mx-2 my-3
+
 p-1
 rounded-3
 bg-light-subtle
 d-flex justify-content-center align-items-center
 text-dark
-flex-shrink-0">
+flex-shrink-0
+{{#if homepage}}
+px-5
+{{/if}}">
     <!-- base id + name container -->
     <div class="container d-flex py-2 rounded-top-3 bg-danger-subtle justify-content-start mx-0 " >
         <!-- outer id container -->
@@ -23,8 +28,8 @@ flex-shrink-0">
         </div>
     </div>
     <!-- sprite image container -->
-    <div class="px-5 py-2">
-        <img src="{{pokesprite}}" alt="{{pokename}}" width="150px" height="150px" class="m-5"/>
+    <div class="{{#if teambuilder}}px-5 py-2{{else}}px-5 mx-5{{/if}}">
+        <img src="{{pokesprite}}" alt="{{pokename}}" width="175px" height="175px" class="m-5"/>
     </div>
     <!-- type1 + type2 container -->
     <div class="container-fluid d-flex justify-content-center align-items-center m-3 mt-0 mx-5">
@@ -38,7 +43,7 @@ flex-shrink-0">
                 <div class="text-center col-12">{{poketype2}}</div>
             </div>
         {{else}}
-            <div class="container bg-primary-subtle col-6 mx-5 rounded">
+            <div class="container bg-primary-subtle col-7 mx-5 rounded">
                 <div class="text-center col-12">{{poketype1}}</div>
             </div>
         {{/if}}

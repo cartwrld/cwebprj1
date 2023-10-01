@@ -14,7 +14,6 @@ async function genFirst20PokeForTeamOptions() {
   };
   return gen20PokesForTeamOptions();
 }
-
 // routername = pokedex, line 9 in app.js
 // http://localhost:3000/pokedex/
 /* GET home page. */
@@ -39,7 +38,13 @@ router.get('/', async function(req, res, next) {
 
   res.render('teambuilder', {
     poke20Display: display20Pokes,
+    teambuilder: true,
+
   });
+});
+
+router.post('/', (req, res, next) => {
+
 });
 
 
