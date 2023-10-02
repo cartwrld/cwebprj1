@@ -10,9 +10,21 @@ const router = express.Router();
 //
 // const {body, query, oneOf, validationResult} = require('express-validator');
 
-router.get('/pokebuilder', function(req, res, next) {
+router.get('/', function(req, res, next) {
   res.render('pokebuilder', {
-
+    sbmtName: req.body.name,
+    sbmtType1: req.body.type1,
+    sbmtType2: req.body.type2,
+    sbmtStats: {
+      sbmtHp: req.body.hp,
+      sbmtAtk: req.body.atk,
+      sbmtDef: req.body.def,
+      sbmtSpAtk: req.body.spatk,
+      sbmtSpDef: req.body.spdef,
+      smbtSpd: req.body.spd,
+    },
+    smbtImage: req.body.pokeImage,
+    smbtDesc: req.body.description,
   });
 });
 

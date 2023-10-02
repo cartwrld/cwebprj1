@@ -2,7 +2,7 @@
 <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2">
     <h2 class="p-0 m-0 pb-3 pt-2 text-light">Build New Team</h2>
     <!-- inner base container -->
-    <div class="container-fluid  mb-2 bg-light bg-body-secondary bg-gradient d-flex flex-column justify-content-around align-content-center mb-1 bg-light
+    <div class="container-fluid  mb-2 d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
     rounded mb-0">
         <!--  card container  -->
         <div class="container d-flex flex-wrap justify-content-around align-items-center
@@ -84,13 +84,13 @@
 <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2">
     <h2 class="p-0 m-0 pb-3 pt-2 text-light">Select your Pokemon</h2>
     <!-- inner base container -->
-    <div class="container-fluid  mb-2 bg-light bg-dark-subtle bg-gradient d-flex flex-column justify-content-around align-content-center mb-1 bg-light
+    <div class="container-fluid mb-2 d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
     rounded-top-3 mb-0">
         <!-- heading + form container -->
         <div class="d-flex flex-column py-4">
             <!-- filters heading container -->
-            <div class=" p-0 m-0 ">
-                <h4 class="p-0 m-0 pb-2 col-12 text-start">Filters</h4>
+            <div class="p-0 m-0 ">
+                <h4 class="p-0 m-0 px-3 pb-2 col-12 text-start">Filters</h4>
             </div>
             <!-- outer criteria form container -->
             <div class="p-0 m-0">
@@ -111,7 +111,7 @@
                                 <label for="searchType1">Type 1:</label>
                                 <select class="form-select" id="searchType1" name="searchType1">
                                     <option value="" {{#unless sbmtType2}}selected{{/unless}}></option>
-                                    <option value="normal" {{#if (equals sbmtType1 "Normal")}}selected{{/if}}>Normal
+                                    <option value="Normal" {{#if (equals sbmtType1 "Normal")}}selected{{/if}}>Normal
                                     </option>
                                     <option value="Fire" {{#if (equals sbmtType1 "Fire")}}selected{{/if}}>Fire</option>
                                     <option value="Water" {{#if (equals sbmtType1 "Water")}}selected{{/if}}>Water
@@ -208,8 +208,8 @@
                     </div>
 
                     <!-- apply filters button container -->
-                    <div class="container-fluid col-2 py-3 d-flex justify-content-center">
-                        <button class="btn btn-success" type="submit">Apply</button>
+                    <div class="container-fluid py-3 d-flex justify-content-center">
+                        <button class="btn btn-success mx-3" type="submit">Apply</button>
                     </div>
                 </form>
             </div>

@@ -1,1 +1,99 @@
-x
+<div class="container d-flex flex-column flex-lg-row justify-content-around align-items-center">
+    <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2">
+        <h2 class="p-0 m-0 pb-3 pt-2 text-light">Build Your Own Pokemon</h2>
+        <!-- inner base container -->
+        <div class="container-fluid d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
+    rounded-3 mb-0">
+
+            <form>
+                <div class="container bg-primary d-flex flex-column justify-content-center align-items-center">
+                    <div class="container d-flex align-items-center mt-5">
+                        <label for="pokeName" class="">Name:</label>
+                        <div class="col">
+                        <input class="form-control" type="text" id="pokeName" name="name"
+                               placeholder="Enter a name" value="{{sbmtNameID}}">
+                        </div>
+                    </div>
+                    <div class="container-fluid d-flex py-4">
+                        <label for="searchType1" class="">Type 1:</label>
+                        <select class="form-select" id="searchType1" name="searchType1">
+                            <option value="" {{#unless sbmtType2}}selected{{/unless}}></option>
+                            <option value="Normal" {{#if (equals sbmtType1 "Normal")}}selected{{/if}}>Normal</option>
+                            <option value="Fire" {{#if (equals sbmtType1 "Fire")}}selected{{/if}}>Fire</option>
+                            <option value="Water" {{#if (equals sbmtType1 "Water")}}selected{{/if}}>Water</option>
+                            <option value="Grass" {{#if (equals sbmtType1 "Grass")}}selected{{/if}}>Grass</option>
+                            <option value="Electric" {{#if (equals sbmtType1 "Electric")}}selected{{/if}}>Electric
+                            </option>
+                            <option value="Ice" {{#if (equals sbmtType1 "Ice")}}selected{{/if}}>Ice</option>
+                            <option value="Fighting" {{#if (equals sbmtType1 "Fighting")}}selected{{/if}}>Fighting
+                            </option>
+                            <option value="Poison" {{#if (equals sbmtType1 "Poison")}}selected{{/if}}>Poison</option>
+                            <option value="Ground" {{#if (equals sbmtType1 "Ground")}}selected{{/if}}>Ground</option>
+                            <option value="Flying" {{#if (equals sbmtType1 "Flying")}}selected{{/if}}>Flying</option>
+                            <option value="Psychic" {{#if (equals sbmtType1 "Psychic")}}selected{{/if}}>Psychic</option>
+                            <option value="Bug" {{#if (equals sbmtType1 "Bug")}}selected{{/if}}>Bug</option>
+                            <option value="Rock" {{#if (equals sbmtType1 "Rock")}}selected{{/if}}>Rock</option>
+                            <option value="Ghost" {{#if (equals sbmtType1 "Ghost")}}selected{{/if}}>Ghost</option>
+                            <option value="Dragon" {{#if (equals sbmtType1 "Dragon")}}selected{{/if}}>Dragon</option>
+                            <option value="Dark" {{#if (equals sbmtType1 "Dark")}}selected{{/if}}>Dark</option>
+                            <option value="Steel" {{#if (equals sbmtType1 "Steel")}}selected{{/if}}>Steel</option>
+                            <option value="Fairy" {{#if (equals sbmtType1 "Fairy")}}selected{{/if}}>Fairy</option>
+                        </select>
+                    </div>
+                    <div class="container-fluid d-flex">
+                        <label for="searchType2">Type 2:</label>
+                        <select class="form-select" id="searchType2" name="searchType2">
+                            <option value="" {{#unless sbmtType2}}selected{{/unless}}></option>
+                            <option value="Normal" {{#if (equals sbmtType2 "Normal")}}selected{{/if}}>Normal
+                            </option>
+                            <option value="Fire" {{#if (equals sbmtType2 "Fire")}}selected{{/if}}>Fire</option>
+                            <option value="Water" {{#if (equals sbmtType2 "Water")}}selected{{/if}}>Water
+                            </option>
+                            <option value="Grass" {{#if (equals sbmtType2 "Grass")}}selected{{/if}}>Grass
+                            </option>
+                            <option value="Electric" {{#if (equals sbmtType2 "Electric")}}selected{{/if}}>
+                                Electric
+                            </option>
+                            <option value="Ice" {{#if (equals sbmtType2 "Ice")}}selected{{/if}}>Ice</option>
+                            <option value="Fighting" {{#if (equals sbmtType2 "Fighting")}}selected{{/if}}>
+                                Fighting
+                            </option>
+                            <option value="Poison" {{#if (equals sbmtType2 "Poison")}}selected{{/if}}>Poison
+                            </option>
+                            <option value="Ground" {{#if (equals sbmtType2 "Ground")}}selected{{/if}}>Ground
+                            </option>
+                            <option value="Flying" {{#if (equals sbmtType2 "Flying")}}selected{{/if}}>Flying
+                            </option>
+                            <option value="Psychic" {{#if (equals sbmtType2 "Psychic")}}selected{{/if}}>
+                                Psychic
+                            </option>
+                            <option value="Bug" {{#if (equals sbmtType2 "Bug")}}selected{{/if}}>Bug</option>
+                            <option value="Rock" {{#if (equals sbmtType2 "Rock")}}selected{{/if}}>Rock</option>
+                            <option value="Ghost" {{#if (equals sbmtType2 "Ghost")}}selected{{/if}}>Ghost
+                            </option>
+                            <option value="Dragon" {{#if (equals sbmtType2 "Dragon")}}selected{{/if}}>Dragon
+                            </option>
+                            <option value="Dark" {{#if (equals sbmtType2 "Dark")}}selected{{/if}}>Dark</option>
+                            <option value="Steel" {{#if (equals sbmtType2 "Steel")}}selected{{/if}}>Steel
+                            </option>
+                            <option value="Fairy" {{#if (equals sbmtType2 "Fairy")}}selected{{/if}}>Fairy
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+    <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2">
+        <h2 class="p-0 m-0 pb-3 pt-2 text-light">PokePreview</h2>
+        <!-- inner base container -->
+        <div class="container-fluid d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
+    rounded-3 mb-0">
+            ;
+
+        </div>
+    </div>
+</div>
+

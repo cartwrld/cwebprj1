@@ -54,7 +54,7 @@ router.get('/', async function(req, res, next) {
   });
 });
 
-router.post('/teambuilder', async (req, res, next) => {
+router.post('/filters', async (req, res, next) => {
   console.log(req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);
 
   const filteredPokes = await pp.handleFiltersApply(

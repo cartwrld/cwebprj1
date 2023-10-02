@@ -28,8 +28,8 @@ router.get('/', async function(req, res, next) {
         pokeid: poke.id,
         pokesprite: poke.sprite,
         pokegen: poke.gen,
-        poketype1: pp.capitalizeFirstLetterOfValue(poke.type1),
-        poketype2: pp.capitalizeFirstLetterOfValue(poke?.type2),
+        poketype1: pp.capitalizeFirstLetterOfNameOrType(poke.type1),
+        poketype2: pp.capitalizeFirstLetterOfNameOrType(poke?.type2),
         pokestats: {
           pokeHP: poke.hp,
           pokeATK: poke.attack,
