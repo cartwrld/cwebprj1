@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-// const Pokemon = require('../public/javascripts/Pokemon.js');
-const PowerPoke = require('../public/javascripts/PowerPoke.js');
 
+const Pokemon = require('../public/javascripts/Pokemon.js');
+const PowerPoke = require('../public/javascripts/PowerPoke.js');
 const pp = new PowerPoke();
 
+
 async function generate10RandomHomePagePokemon() {
-  const initList = await pp.getPokemonByGeneration(1);
+  const initList = await pp.getPokemonByGeneration();
   let x;
   const randomHomePokes = async () => {
     x = await pp.get8RandomPokeURLFromInitialFetch(initList);
@@ -53,5 +54,4 @@ router.get('/', async function(req, res, next) {
 });
 
 module.exports = router;
-
 

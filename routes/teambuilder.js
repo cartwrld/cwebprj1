@@ -4,7 +4,13 @@ const PowerPoke = require('../public/javascripts/PowerPoke');
 
 const pp = new PowerPoke();
 
+let displayPokes;
+let output20PokeInfo;
 
+// const createPokeObjCollection = async () => {
+//   return await pp.genPokeObjCollection();
+// };
+// const pokeCollection = createPokeObjCollection();
 async function genFirst20PokeForTeamOptions() {
   const initList = await pp.getPokemonByGeneration(1);
   let first20;
@@ -14,15 +20,16 @@ async function genFirst20PokeForTeamOptions() {
   };
   return gen20PokesForTeamOptions();
 }
+
 // routername = pokedex, line 9 in app.js
 // http://localhost:3000/pokedex/
 /* GET home page. */
 router.get('/', async function(req, res, next) {
   const poke20List = await genFirst20PokeForTeamOptions();
-  const display20Pokes = [];
-  const output20PokeInfo = async () => {
+  displayPokes = [];
+  output20PokeInfo = async () => {
     for (const [, poke] of Object.entries(poke20List)) {
-      display20Pokes.push({
+      displayPokes.push({
         pokename: pp.formatPokeName(poke.name),
         pokeid: poke.id,
         pokesprite: poke.sprite,
@@ -37,20 +44,40 @@ router.get('/', async function(req, res, next) {
   // console.log(poke20List);
 
   res.render('teambuilder', {
-    poke20Display: display20Pokes,
-    teambuilder: true,
+    sbmtNameID: req.query.searchNameID, // submitted searchNameID from post
+    sbmtType1: req.query.searchType1, // submitted searchType1 from post
+    sbmtType2: req.query.searchType2, // submitted searchType2 from post
+    sbmtGen: req.query.searchGen, // submitted searchGen from post
 
+    teambuilder: true,
+    poke20Display: displayPokes,
   });
 });
 
 router.post('/', (req, res, next) => {
+  res.render('teambuilder', {
+    sbmtNameID: req.body.searchNameID, // submitted searchNameID from post
+    sbmtType1: req.body.searchType1, // submitted searchType1 from post
+    sbmtType2: req.body.searchType2, // submitted searchType2 from post
+    sbmtGen: req.body.searchGen, // submitted searchGen from post
 
+    filtersSubmitted: true,
+
+    poke20Display: pp.handleFiltersApply(),
+  } );
+  // genDisplayPokes(req.body.searchNameID,
+  // req.body.searchType1,
+  // req.body.searchType2,
+  // req.body.searchGen
+
+  // err: {email: 'Email is not recognized', pwd: 'Password is not recognized'},
 });
 
 
 // router.get('/browse', function(req, res, next) {
 //   res.render('');
 // });
+
 
 module.exports = router;
 

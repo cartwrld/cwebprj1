@@ -80,5 +80,6 @@ function onListening() {
     debug('Listening on ' + bind);
 
     console.log(`Ready to view @ http://localhost:${port}`);
-    // console.log(`Ready to view @ http://localhost:${port}/teambuilder/`);
+    console.log(`Ready to view @ http://localhost:${port}/teambuilder/`);
+    console.log(`Ready to view @ http://localhost:${port}/pokebuilder/`);
 }

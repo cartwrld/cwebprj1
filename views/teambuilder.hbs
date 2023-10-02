@@ -1,13 +1,9 @@
 <!-- base container -->
-<div class="container-fluid container-xxl bg-danger text-center rounded-4 text-dark
-            py-2
-
-            ">
-    <h2 class="text-white px-1">Build New Team</h2>
-    <!-- outer card container container -->
-    <div class="container-fluid d-flex flex-column justify-content-around align-content-center
-                mb-1
-                bg-light rounded-3">
+<div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2">
+    <h2 class="p-0 m-0 pb-3 pt-2 text-light">Build New Team</h2>
+    <!-- inner base container -->
+    <div class="container-fluid  mb-2 bg-light bg-body-secondary bg-gradient d-flex flex-column justify-content-around align-content-center mb-1 bg-light
+    rounded mb-0">
         <!--  card container  -->
         <div class="container d-flex flex-wrap justify-content-around align-items-center
                     mt-3
@@ -86,7 +82,7 @@
 
 <!-- base container -->
 <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2">
-    <h2 class="p-0 m-0 pb-3 pt-1 text-light">Select your Pokemon</h2>
+    <h2 class="p-0 m-0 pb-3 pt-2 text-light">Select your Pokemon</h2>
     <!-- inner base container -->
     <div class="container-fluid  mb-2 bg-light bg-dark-subtle bg-gradient d-flex flex-column justify-content-around align-content-center mb-1 bg-light
     rounded-top-3 mb-0">
@@ -98,15 +94,15 @@
             </div>
             <!-- outer criteria form container -->
             <div class="p-0 m-0">
-                <form>
+                <form action="/teambuilder/" method="post">
                     <!-- base filters form controls container -->
                     <div class="container d-flex flex-column flex-md-row col-md-12 justify-content-center align-items-center">
                         <!-- name/ID + generation container -->
                         <!-- name/ID search input container -->
                         <div class="container col-12 col-lg-6 col-md-6">
-                            <label for="searchName">Name or ID:</label>
-                            <input class="form-control" type="text" id="searchName"
-                                   placeholder="Search by Pokemon name or ID ">
+                            <label for="searchNameID">Name or ID:</label>
+                            <input class="form-control" type="text" id="searchNameID" name="searchNameID"
+                                   placeholder="Search by Pokemon name or ID" value="{{sbmtNameID}}">
                         </div>
                         <!-- generation select container -->
 
@@ -115,80 +111,82 @@
                         <div class="container d-flex flex-column my-3 col-lg-5 col-md-5 col-12">
                             <!-- type1 select container -->
                             <div class="container">
-                                <label for="type1Select">Type 1:</label>
-                                <select class="form-select" id="type1Select">
-                                    <option value="" selected></option>
-                                    <option value="Normal">Normal</option>
-                                    <option value="Fire">Fire</option>
-                                    <option value="Water">Water</option>
-                                    <option value="Grass">Grass</option>
-                                    <option value="Electric">Electric</option>
-                                    <option value="Ice">Ice</option>
-                                    <option value="Fighting">Fighting</option>
-                                    <option value="Poison">Poison</option>
-                                    <option value="Ground">Ground</option>
-                                    <option value="Flying">Flying</option>
-                                    <option value="Psychic">Psychic</option>
-                                    <option value="Bug">Bug</option>
-                                    <option value="Rock">Rock</option>
-                                    <option value="Ghost">Ghost</option>
-                                    <option value="Dragon">Dragon</option>
-                                    <option value="Dark">Dark</option>
-                                    <option value="Steel">Steel</option>
-                                    <option value="Fairy">Fairy</option>
+                                <label for="searchType1">Type 1:</label>
+                                <select class="form-select" id="searchType1" name="searchType1">
+                                    <option value="" {{#unless sbmtType2}}selected{{/unless}}></option>
+                                    <option value="Normal" {{#if (equals sbmtType1 "Normal")}}selected{{/if}}>Normal</option>
+                                    <option value="Fire" {{#if (equals sbmtType1 "Fire")}}selected{{/if}}>Fire</option>
+                                    <option value="Water" {{#if (equals sbmtType1 "Water")}}selected{{/if}}>Water</option>
+                                    <option value="Grass" {{#if (equals sbmtType1 "Grass")}}selected{{/if}}>Grass</option>
+                                    <option value="Electric" {{#if (equals sbmtType1 "Electric")}}selected{{/if}}>Electric</option>
+                                    <option value="Ice" {{#if (equals sbmtType1 "Ice")}}selected{{/if}}>Ice</option>
+                                    <option value="Fighting" {{#if (equals sbmtType1 "Fighting")}}selected{{/if}}>Fighting</option>
+                                    <option value="Poison" {{#if (equals sbmtType1 "Poison")}}selected{{/if}}>Poison</option>
+                                    <option value="Ground" {{#if (equals sbmtType1 "Ground")}}selected{{/if}}>Ground</option>
+                                    <option value="Flying" {{#if (equals sbmtType1 "Flying")}}selected{{/if}}>Flying</option>
+                                    <option value="Psychic" {{#if (equals sbmtType1 "Psychic")}}selected{{/if}}>Psychic</option>
+                                    <option value="Bug" {{#if (equals sbmtType1 "Bug")}}selected{{/if}}>Bug</option>
+                                    <option value="Rock" {{#if (equals sbmtType1 "Rock")}}selected{{/if}}>Rock</option>
+                                    <option value="Ghost" {{#if (equals sbmtType1 "Ghost")}}selected{{/if}}>Ghost</option>
+                                    <option value="Dragon" {{#if (equals sbmtType1 "Dragon")}}selected{{/if}}>Dragon</option>
+                                    <option value="Dark" {{#if (equals sbmtType1 "Dark")}}selected{{/if}}>Dark</option>
+                                    <option value="Steel" {{#if (equals sbmtType1 "Steel")}}selected{{/if}}>Steel</option>
+                                    <option value="Fairy" {{#if (equals sbmtType1 "Fairy")}}selected{{/if}}>Fairy</option>
                                 </select>
                             </div>
                             <!-- type2 select container -->
                             <div class="container">
-                                <label for="type2Select">Type 2:</label>
-                                <select class="form-select" id="type2Select">
-                                    <option value="" selected></option>
-                                    <option value="Normal">Normal</option>
-                                    <option value="Fire">Fire</option>
-                                    <option value="Water">Water</option>
-                                    <option value="Grass">Grass</option>
-                                    <option value="Electric">Electric</option>
-                                    <option value="Ice">Ice</option>
-                                    <option value="Fighting">Fighting</option>
-                                    <option value="Poison">Poison</option>
-                                    <option value="Ground">Ground</option>
-                                    <option value="Flying">Flying</option>
-                                    <option value="Psychic">Psychic</option>
-                                    <option value="Bug">Bug</option>
-                                    <option value="Rock">Rock</option>
-                                    <option value="Ghost">Ghost</option>
-                                    <option value="Dragon">Dragon</option>
-                                    <option value="Dark">Dark</option>
-                                    <option value="Steel">Steel</option>
-                                    <option value="Fairy">Fairy</option>
+                                <label for="searchType2">Type 2:</label>
+                                <select class="form-select" id="searchType2" name="searchType2">
+                                    <option value="" {{#unless sbmtType2}}selected{{/unless}}></option>
+                                    <option value="Normal" {{#if (equals sbmtType2 "Normal")}}selected{{/if}}>Normal</option>
+                                    <option value="Fire" {{#if (equals sbmtType2 "Fire")}}selected{{/if}}>Fire</option>
+                                    <option value="Water" {{#if (equals sbmtType2 "Water")}}selected{{/if}}>Water</option>
+                                    <option value="Grass" {{#if (equals sbmtType2 "Grass")}}selected{{/if}}>Grass</option>
+                                    <option value="Electric" {{#if (equals sbmtType2 "Electric")}}selected{{/if}}>Electric</option>
+                                    <option value="Ice" {{#if (equals sbmtType2 "Ice")}}selected{{/if}}>Ice</option>
+                                    <option value="Fighting" {{#if (equals sbmtType2 "Fighting")}}selected{{/if}}>Fighting</option>
+                                    <option value="Poison" {{#if (equals sbmtType2 "Poison")}}selected{{/if}}>Poison</option>
+                                    <option value="Ground" {{#if (equals sbmtType2 "Ground")}}selected{{/if}}>Ground</option>
+                                    <option value="Flying" {{#if (equals sbmtType2 "Flying")}}selected{{/if}}>Flying</option>
+                                    <option value="Psychic" {{#if (equals sbmtType2 "Psychic")}}selected{{/if}}>Psychic</option>
+                                    <option value="Bug" {{#if (equals sbmtType2 "Bug")}}selected{{/if}}>Bug</option>
+                                    <option value="Rock" {{#if (equals sbmtType2 "Rock")}}selected{{/if}}>Rock</option>
+                                    <option value="Ghost" {{#if (equals sbmtType2 "Ghost")}}selected{{/if}}>Ghost</option>
+                                    <option value="Dragon" {{#if (equals sbmtType2 "Dragon")}}selected{{/if}}>Dragon</option>
+                                    <option value="Dark" {{#if (equals sbmtType2 "Dark")}}selected{{/if}}>Dark</option>
+                                    <option value="Steel" {{#if (equals sbmtType2 "Steel")}}selected{{/if}}>Steel</option>
+                                    <option value="Fairy" {{#if (equals sbmtType2 "Fairy")}}selected{{/if}}>Fairy</option>
                                 </select>
                             </div>
                         </div>
                         <div class="container flex-shrink-1 col-2">
-                            <label for="genSelect">Generation:</label>
-                            <select class="form-select" id="genSelect">
+                            <label for="searchGen">Generation:</label>
+                            <select class="form-select" id="searchGen" name="searchGen">
                                 <option value="" selected></option>
-                                <option value="gen1">1</option>
-                                <option value="gen2">2</option>
-                                <option value="gen3">3</option>
-                                <option value="gen4">4</option>
-                                <option value="gen5">5</option>
-                                <option value="gen6">6</option>
-                                <option value="gen7">7</option>
-                                <option value="gen8">8</option>
-                                <option value="gen9">9</option>
+                                <option value="1" {{#if (equals sbmtGen '1')}}selected{{/if}}>1</option>
+                                <option value="2" {{#if (equals sbmtGen '2')}}selected{{/if}}>2</option>
+                                <option value="3" {{#if (equals sbmtGen '3')}}selected{{/if}}>3</option>
+                                <option value="4" {{#if (equals sbmtGen '4')}}selected{{/if}}>4</option>
+                                <option value="5" {{#if (equals sbmtGen '5')}}selected{{/if}}>5</option>
+                                <option value="6" {{#if (equals sbmtGen '6')}}selected{{/if}}>6</option>
+                                <option value="7" {{#if (equals sbmtGen '7')}}selected{{/if}}>7</option>
+                                <option value="8" {{#if (equals sbmtGen '8')}}selected{{/if}}>8</option>
+                                <option value="9" {{#if (equals sbmtGen '9')}}selected{{/if}}>9</option>
                             </select>
                         </div>
                     </div>
+
+                    <!-- apply filters button container -->
+                    <div class="container-fluid col-2 py-3 d-flex justify-content-center">
+                        <button class="btn btn-success" type="submit" >Apply</button>
+                    </div>
                 </form>
             </div>
-            <!-- apply filters button container -->
-            <div class="container-fluid col-2 py-3 d-flex justify-content-center">
-                <input class="btn btn-success" type="button" value="Apply">
-            </div>
+
         </div>
     </div>
-    <div class="container-fluid mt-0 d-flex flex-wrap bg-body-secondary">
+    <div class="container-fluid mt-0 mb-1 d-flex flex-wrap bg-body-secondary rounded-bottom">
         <div class="container-fluid d-flex flex-wrap justify-content-center ">
             {{#each poke20Display}}
                 <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6
