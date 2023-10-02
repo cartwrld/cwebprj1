@@ -1,8 +1,9 @@
 const Pokemon = require('./Pokemon.js');
+const url = require('url');
 
 
 const currentOffset = 0;
-const API_ROOT = 'https://pokeapi.co/api/v2/';
+const API_ROOT = 'https://pokeapi.co/api/v2';
 const pokeCollection = [];
 
 
@@ -95,9 +96,7 @@ class PowerPoke {
       for (let i = 0; i < 20; i++) {
         // const randomNum = Math.floor(Math.random() * initResp.results.length); // generate random number is within the resultset
         // const pokeURL = initResp.pokemon_species[i].url;// select the URL of the pokemon in the resultset with the random number
-
-
-        const pokeRes = await fetch(`${API_ROOT}pokemon/${pokeStartNum++}`);// fetch with specific URL corresponding to the randomly chosen pokemon
+        const pokeRes = await fetch(`${API_ROOT}/pokemon/${pokeStartNum++}`);// fetch with specific URL corresponding to the randomly chosen pokemon
 
         if (pokeRes.ok) {
           const randPokeData = await pokeRes.json(); // JSON obj
@@ -159,7 +158,7 @@ class PowerPoke {
      */
   formatPokeName(name) {
     if (!name.includes(' ') && !name.includes('.') && !name.includes('-')) {
-      return this.capitalizeFirstLetterOfValue(name);
+      return this.capitalizeFirstLetterOfNameOrType(name);
     }
     let formattedName = this.handleOddCharsInName(name, ' ');
     formattedName = this.handleOddCharsInName(formattedName, '-');
@@ -181,7 +180,7 @@ class PowerPoke {
     if (nameVal.includes(char)) {
       const nameArr = nameVal.split(char);
       for (const str of nameArr) {
-        fixedName += this.capitalizeFirstLetterOfValue(str) + char;
+        fixedName += this.capitalizeFirstLetterOfNameOrType(str) + char;
       }
       return fixedName;
     } else return nameVal;
@@ -193,7 +192,7 @@ class PowerPoke {
      * @param value - String you would like to capitalize the first letter of
      * @return {string} - The formatted name
      */
-  capitalizeFirstLetterOfValue(value) {
+  capitalizeFirstLetterOfNameOrType(value) {
     if (value === null || value === undefined) {
       return;
     }
@@ -201,27 +200,77 @@ class PowerPoke {
   }
 
   async handleFiltersApply(nameID, type1, type2, gen) {
-    const filteredPokes = [];
-    // Conditions where only one criterion is provided
-    if (nameID && !gen && !type1 && !type2) {
-      const poke = await this.fetchByNameOrID(nameID);
-      filteredPokes.push(poke);
+    if (!nameID, !type1, !type2, !gen) {
+
     }
+
+    let filteredPokes;
+    nameID = nameID.toLowerCase();
+    type1 = type1.toLowerCase();
+    type2 = type2.toLowerCase();
+    gen = gen.toLowerCase();
+
+    const filterHandler = async () => {
+      filteredPokes = [];
+      // Conditions where only one criterion is provided
+      if (nameID && !gen && !type1 && !type2) {
+        const poke = await this.fetchByNameOrID(nameID);
+        filteredPokes.push(poke);
+        return filteredPokes;
+      }
+      // if gen is present in search, search by gen first
+      if (gen) {
+        const genList = await this.fetchByGeneration(gen);
+        if (!type1 && !type2) {
+          filteredPokes = genList.filter((poke) => poke.gen === gen);
+          return filteredPokes;
+        }
+        if (type1 && type2) {
+          filteredPokes = genList.filter((poke) => poke.type1 === type1);
+          filteredPokes = genList.filter((poke) => poke.type2 === type2);
+          return filteredPokes;
+        }
+        if (type1 && !type2) {
+          filteredPokes = genList.filter((poke) => poke.type1 === type1);
+          return filteredPokes;
+        }
+        if (!type1 && type2) {
+          filteredPokes = genList.filter((poke) => poke.type2 === type2);
+          return filteredPokes;
+        }
+      } else {
+        let typeList;
+
+        if (type1 && type2) {
+          typeList = await this.fetchByType(type1, 1);
+          filteredPokes = typeList.filter((poke) => poke.type2 === type2);
+          return filteredPokes;
+        }
+        if (type1 && !type2) {
+          filteredPokes = await this.fetchByType(type1, 1);
+          return filteredPokes;
+        }
+        if (!type1 && type2) {
+          filteredPokes = await this.fetchByType(type2, 2);
+          return filteredPokes;
+        }
+      }
+    };
+
+    await filterHandler();
+
     return filteredPokes;
   };
 
 
   async fetchByNameOrID(searchNameID) {
     try {
-      const getNameOrIDSearchResults = async () => {
-        const nameRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchNameID}/`);
-        if (nameRes.ok) {
-          const pokeData = await nameRes.json();
-          // console.log(countData.results.length);
-          return this.buildPokeObj(pokeData);
-        }
-      };
-      return await getNameOrIDSearchResults();
+      const nameRes = await fetch(`${API_ROOT}/pokemon/${searchNameID}/`);
+      if (nameRes.ok) {
+        const pokeData = await nameRes.json();
+
+        return this.buildPokeObj(pokeData);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -230,14 +279,50 @@ class PowerPoke {
   async fetchByGeneration(searchGen) {
     try {
       const getGenOnlySearchResults = async () => {
-        const genRes = await fetch(`https://pokeapi.co/api/v2/generation/${searchGen}/`);
+        const genRes = await fetch(`${API_ROOT}/generation/${searchGen}/`);
         if (genRes.ok) {
-          const countData = await genRes.json();
-          // console.log(countData.results.length);
-          return countData;
+          const genData = await genRes.json();
+          const filteredGenPokes = [];
+
+          for (const poke of genData.pokemon_species) {
+            const pokeURL = poke.url.replace('-species', '');
+            const pokeGenRes = await fetch(pokeURL); // fetch with specific URL corresponding to the randomly chosen pokemon
+
+            if (pokeGenRes.ok) {
+              const genPokeData = await pokeGenRes.json();
+              filteredGenPokes.push(this.buildPokeObj(genPokeData));
+            }
+          }
+          return filteredGenPokes;
         }
       };
       return await getGenOnlySearchResults();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async fetchByType(searchType, typeNum) {
+    try {
+      const getTypeOnlySearchResults = async () => {
+        const typeRes = await fetch(`${API_ROOT}/type/${searchType}/`);
+        if (typeRes.ok) {
+          const typeData = await typeRes.json();
+          const filteredTypePokes = [];
+
+          for (const poke of typeData.pokemon) {
+            if (poke.slot === typeNum) {
+              const pokeTypeRes = await fetch(poke.pokemon.url); // fetch with specific URL corresponding to the randomly chosen pokemon
+              if (pokeTypeRes.ok) {
+                const typePokeData = await pokeTypeRes.json();
+                filteredTypePokes.push(this.buildPokeObj(typePokeData));
+              }
+            }
+          }
+          return filteredTypePokes;
+        }
+      };
+      return await getTypeOnlySearchResults();
     } catch (error) {
       console.error(error);
     }

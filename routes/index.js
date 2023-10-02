@@ -46,8 +46,6 @@ router.get('/', async function(req, res, next) {
   await outputInfo();
 
   res.render('index', {
-
-    path: 'https://www.pngkit.com/png/full/783-7831178_pokeball-pokeball-pixel-png.png',
     cards: displayPokes,
     homepage: true,
   });

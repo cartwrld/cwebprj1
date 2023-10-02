@@ -1,13 +1,18 @@
-<!-- base pokecard container -->
-<!--col-8 col-sm-5 col-lg-3 col-xl-2 col-xxl-2-->
+<!-- base pokecard container col-8 col-sm-5 col-lg-3 col-xl-2 col-xxl-3-->
+
 <div class="card
 
-p-1
 mx-2 my-3
+
+p-1
 rounded-3
 bg-light-subtle
 d-flex justify-content-center align-items-center
-text-dark">
+text-dark
+flex-shrink-0
+{{#if homepage}}
+px-5
+{{/if}}">
     <!-- base id + name container -->
     <div class="container d-flex py-2 rounded-top-3 bg-danger-subtle justify-content-start mx-0 " >
         <!-- outer id container -->
@@ -23,26 +28,24 @@ text-dark">
         </div>
     </div>
     <!-- sprite image container -->
-    <div class="px-4 py-2">
-        <img src="{{pokesprite}}" alt="{{pokename}}" width="150px" height="150px"/>
+    <div class="{{#if teambuilder}}px-5 py-2{{else}}px-5 mx-5{{/if}}">
+        <img src="{{pokesprite}}" alt="{{pokename}}" width="175px" height="175px" class="m-5"/>
     </div>
     <!-- type1 + type2 container -->
-    <div class="d-flex justify-content-around align-items-center m-3 mt-0 mx-5">
+    <div class="container-fluid d-flex justify-content-center align-items-center m-3 mt-0 mx-5">
         <!-- inner type2 container -->
-
         {{#if multitype}}
-            <div class="container bg-primary-subtle">
-                <div class="text-center p-1 col-6">{{poketype1}}</div>
+            <div class="container bg-body-tertiary border border-danger-subtle border-2 col-6 rounded-start">
+                <div class="text-center col-12">{{poketype1}}</div>
             </div>
             <!-- inner type2 container -->
-            <div class="container bg-success-subtle col-6">
-                <div class="text-center p-1">{{poketype2}}</div>
+            <div class="container bg-body-tertiary border border-danger-subtle border-2 col-6 rounded-end">
+                <div class="text-center col-12">{{poketype2}}</div>
             </div>
         {{else}}
-            <div class="container bg-primary-subtle">
-                <div class="text-center p-1 col-12">{{poketype1}}</div>
+            <div class="container bg-body-tertiary border border-danger-subtle border-2 col-7 mx-5 rounded">
+                <div class="text-center col-12">{{poketype1}}</div>
             </div>
         {{/if}}
-
     </div>
 </div>

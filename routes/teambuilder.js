@@ -33,8 +33,8 @@ router.get('/', async function(req, res, next) {
         pokename: pp.formatPokeName(poke.name),
         pokeid: poke.id,
         pokesprite: poke.sprite,
-        poketype1: pp.capitalizeFirstLetterOfValue(poke.type1),
-        poketype2: pp.capitalizeFirstLetterOfValue(poke?.type2),
+        poketype1: pp.capitalizeFirstLetterOfNameOrType(poke.type1),
+        poketype2: pp.capitalizeFirstLetterOfNameOrType(poke?.type2),
         multitype: poke.type2 !== undefined,
       });
     }
@@ -50,12 +50,34 @@ router.get('/', async function(req, res, next) {
     sbmtGen: req.query.searchGen, // submitted searchGen from post
 
     teambuilder: true,
-    poke20Display: displayPokes,
+    cards: displayPokes,
   });
 });
 
-router.post('/', (req, res, next) => {
-  res.render('teambuilder', {
+router.post('/teambuilder', async (req, res, next) => {
+  console.log(req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);
+
+  const filteredPokes = await pp.handleFiltersApply(
+      req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);
+  displayPokes = [];
+  console.log(displayPokes);
+
+  outputFilteredPokes = async () => {
+    for (const [, poke] of Object.entries(filteredPokes)) {
+      displayPokes.push({
+        pokename: pp.formatPokeName(poke.name),
+        pokeid: poke.id,
+        pokesprite: poke.sprite,
+        poketype1: pp.capitalizeFirstLetterOfNameOrType(poke.type1),
+        poketype2: pp.capitalizeFirstLetterOfNameOrType(poke?.type2),
+        multitype: poke.type2 !== undefined,
+      });
+    }
+  };
+
+  await outputFilteredPokes();
+
+  await res.render('teambuilder', {
     sbmtNameID: req.body.searchNameID, // submitted searchNameID from post
     sbmtType1: req.body.searchType1, // submitted searchType1 from post
     sbmtType2: req.body.searchType2, // submitted searchType2 from post
@@ -63,14 +85,9 @@ router.post('/', (req, res, next) => {
 
     filtersSubmitted: true,
 
-    poke20Display: pp.handleFiltersApply(),
-  } );
-  // genDisplayPokes(req.body.searchNameID,
-  // req.body.searchType1,
-  // req.body.searchType2,
-  // req.body.searchGen
-
-  // err: {email: 'Email is not recognized', pwd: 'Password is not recognized'},
+    cards: displayPokes,
+    empty: filteredPokes.length < 1,
+  });
 });
 
 
