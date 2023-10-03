@@ -46,7 +46,9 @@ router.get('/',
       const violations = validationResult(req);
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
+
       console.log(errorMessages);
+      console.log(req.files);
 
       res.render('pokebuilder', {
         pokebuilder: true,
@@ -97,6 +99,28 @@ router.post('/preview',
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
       console.log(errorMessages);
+      console.log(req.files);
+
+      const imageProps = [];
+
+
+      // for (const [field, fileArray] of Object.entries(req.files)) {
+      //   for (const tempfile of fileArray) {
+      //     // if errorMessage exists for title1, file1, or title2, file2, then delete the file.
+      //     // if (errorMessages['title' + tmpNum] || errorMessages['file' + tmpNum]) {
+      //     //   fs.unlinkSync(tempfile.path);
+      //     // } else {
+      //     // add code to the displayItArray that will show file info to the user
+      //     imageProps.push({
+      //       info: tempfile.originalname,
+      //       imgsrc: `/images/${tempfile.filename}-${tempfile.originalname}`,
+      //     },
+      //     );
+      //     moveFile(tempfile, 'D:\\GitHub\\cwebprj1\\public\\images\\');
+      //     // }
+      //   }
+      // }
+
       res.render('pokebuilder', {
         pokebuilder: true,
 
@@ -110,29 +134,30 @@ router.post('/preview',
         sbmtSPATK: req.body.spatk,
         sbmtSPDEF: req.body.spdef,
         sbmtSPD: req.body.spd,
-        smbtPhoto: req.body.photo,
+        smbtPhoto: imageProps,
         smbtDesc: req.body.desc,
 
+        submitted: true,
         err: errorMessages,
       });
     });
 
 
-// /**
-//  * @param {MulterFileInfo} tempFile
-//  * @param {string} newPath
-//  */
-// function moveFile(tempFile, newPath) {
-//   // append the files filename and originalname to the path
-//   newPath += tempFile.filename + '-' + tempFile.originalname;
-//   fs.rename(tempFile.path, newPath, (err) => {
-//     // if there is a file system error just throw the error for now
-//     if (err) throw err;
-//
-//     // OPTIONAL: inspect new path in terminal
-//     // console.log('File moved to ' + newPath);
-//   });
-// }
+/**
+ * @param {MulterFileInfo} tempFile
+ * @param {string} newPath
+ */
+function moveFile(tempFile, newPath) {
+  // append the files filename and originalname to the path
+  newPath += tempFile.filename + '-' + tempFile.originalname;
+  fs.rename(tempFile.path, newPath, (err) => {
+    // if there is a file system error just throw the error for now
+    if (err) throw err;
+
+    // OPTIONAL: inspect new path in terminal
+    // console.log('File moved to ' + newPath);
+  });
+}
 
 module.exports = router;
 // module.exports = (pp) => {

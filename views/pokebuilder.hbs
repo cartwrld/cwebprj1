@@ -5,7 +5,7 @@
         <div class="container-fluid d-flex flex-column justify-content-around align-content-center bg-light
     rounded-3 mb-0">
 
-            <form action="/pokebuilder/preview" method="post">
+            <form action="/pokebuilder/preview" method="post" >
                 <div class="container d-flex flex-column justify-content-center align-items-center">
                     <div class="container d-flex flex-column align-items-center py-3 mt-5 mb-3 bg-body-secondary border border-black rounded-2">
                         <div class="container d-flex flex-row justify-content-between align-items-center">
@@ -183,12 +183,10 @@
                         </div>
                         <div class="container d-flex align-items-center pt-3 pb-2">
                             <div class="col-12">
+                                <label for="desc"></label>
+                                <textarea class="form-control col-12 text-dark {{#if err.desc}}is-invalid{{/if}}"
+                                          id="desc" name="desc" rows="4" minlength="1" maxlength="500" required>{{sbmtDesc}}</textarea>
 
-                                <label for="description"></label>
-                                <textarea class="form-control col-12 {{#if err.desc}}is-invalid{{/if}}"
-                                          id="description" name="desc" rows="4" required>
-                                    {{sbmtDesc}}
-                                </textarea>
                                 <div class="invalid-feedback">{{err.desc}}</div>
                             </div>
                         </div>
@@ -209,7 +207,7 @@
         <div class="container-fluid d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
     rounded-3 mb-0">
             <div class="card">
-                <img src="{{img}}" title="{{sbmtName}}">
+                <img src="{{imgsrc}}" title="{{sbmtName}}">
                 <div><p></p>Name: {{sbmtName}}</div>
                 <div><p>Type 1: {{sbmtType1}}</div>
                 <div><p>Type 2: {{sbmtType2}}</div>
