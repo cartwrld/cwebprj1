@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 const fs = require('fs');
 const multer = require('multer');
 
+const storage = multer.diskStorage({
+  destination: './public/uploads/',
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  },
+});
 const upload = multer({
   dest: 'public/uploads',
 });
@@ -15,7 +22,7 @@ const onlyMsgErrorFormatter = ({location, msg, param, value, nestedErrors}) => {
   return msg; // just return the string - this is not an object
 };
 
-router.get('/',
+router.get('/', upload.fields([{name: 'file1', maxCount: 1}]),
     [
       query('name').if(query('name').exists())
           .trim().notEmpty().withMessage('PokeName is required').bail()
@@ -45,7 +52,6 @@ router.get('/',
     function(req, res, next) {
       const violations = validationResult(req);
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
-
 
       console.log(errorMessages);
       console.log(req.files);
@@ -99,27 +105,8 @@ router.post('/preview',
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
       console.log(errorMessages);
+      console.log('++++====++++====++++');
       console.log(req.files);
-
-      const imageProps = [];
-
-
-      // for (const [field, fileArray] of Object.entries(req.files)) {
-      //   for (const tempfile of fileArray) {
-      //     // if errorMessage exists for title1, file1, or title2, file2, then delete the file.
-      //     // if (errorMessages['title' + tmpNum] || errorMessages['file' + tmpNum]) {
-      //     //   fs.unlinkSync(tempfile.path);
-      //     // } else {
-      //     // add code to the displayItArray that will show file info to the user
-      //     imageProps.push({
-      //       info: tempfile.originalname,
-      //       imgsrc: `/images/${tempfile.filename}-${tempfile.originalname}`,
-      //     },
-      //     );
-      //     moveFile(tempfile, 'D:\\GitHub\\cwebprj1\\public\\images\\');
-      //     // }
-      //   }
-      // }
 
       res.render('pokebuilder', {
         pokebuilder: true,
@@ -134,7 +121,7 @@ router.post('/preview',
         sbmtSPATK: req.body.spatk,
         sbmtSPDEF: req.body.spdef,
         sbmtSPD: req.body.spd,
-        smbtPhoto: imageProps,
+        sbmtPhoto: `/uploads/${req.file.filename}`,
         smbtDesc: req.body.desc,
 
         submitted: true,
