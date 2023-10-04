@@ -1,16 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path');
 
 const fs = require('fs');
 const multer = require('multer');
 
-const storage = multer.diskStorage({
-  destination: './public/uploads/',
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  },
-});
 const upload = multer({
   dest: 'public/uploads',
 });
@@ -22,7 +15,7 @@ const onlyMsgErrorFormatter = ({location, msg, param, value, nestedErrors}) => {
   return msg; // just return the string - this is not an object
 };
 
-router.get('/', upload.fields([{name: 'file1', maxCount: 1}]),
+router.get('/',
     [
       query('name').if(query('name').exists())
           .trim().notEmpty().withMessage('PokeName is required').bail()
@@ -53,6 +46,7 @@ router.get('/', upload.fields([{name: 'file1', maxCount: 1}]),
       const violations = validationResult(req);
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
+
       console.log(errorMessages);
       console.log(req.files);
 
@@ -77,12 +71,12 @@ router.get('/', upload.fields([{name: 'file1', maxCount: 1}]),
 
 router.post('/preview',
     [
-      body('name').trim().notEmpty().withMessage('PokeName is required!').bail()
+      body('name').trim().notEmpty().withMessage('PokeName is required').bail()
           .isLength({min: 2, max: 20}).withMessage('Name must have between 2 and 20 letters'),
-      body('type1').notEmpty().withMessage('PokeType is required!').bail()
+      body('type1').notEmpty().withMessage('PokeType is required').bail()
           .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
           .withMessage('Invalid PokeType')
-          .notEmpty().withMessage('You must choose at least 1 PokeType!'),
+          .notEmpty().withMessage('You must choose at least 1 PokeType'),
       body('hp').trim().notEmpty().withMessage('HP Stat is required!').bail()
           .isNumeric().withMessage('Please enter a value between 1 and 999'),
       body('atk').trim().notEmpty().withMessage('ATK Stat is required!').bail()
@@ -105,8 +99,27 @@ router.post('/preview',
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
       console.log(errorMessages);
-      console.log('++++====++++====++++');
       console.log(req.files);
+
+      const imageProps = [];
+
+
+      // for (const [field, fileArray] of Object.entries(req.files)) {
+      //   for (const tempfile of fileArray) {
+      //     // if errorMessage exists for title1, file1, or title2, file2, then delete the file.
+      //     // if (errorMessages['title' + tmpNum] || errorMessages['file' + tmpNum]) {
+      //     //   fs.unlinkSync(tempfile.path);
+      //     // } else {
+      //     // add code to the displayItArray that will show file info to the user
+      //     imageProps.push({
+      //       info: tempfile.originalname,
+      //       imgsrc: `/images/${tempfile.filename}-${tempfile.originalname}`,
+      //     },
+      //     );
+      //     moveFile(tempfile, 'D:\\GitHub\\cwebprj1\\public\\images\\');
+      //     // }
+      //   }
+      // }
 
       res.render('pokebuilder', {
         pokebuilder: true,
@@ -121,7 +134,7 @@ router.post('/preview',
         sbmtSPATK: req.body.spatk,
         sbmtSPDEF: req.body.spdef,
         sbmtSPD: req.body.spd,
-        sbmtPhoto: `/uploads/${req.file.filename}`,
+        smbtPhoto: imageProps,
         smbtDesc: req.body.desc,
 
         submitted: true,
