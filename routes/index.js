@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const Pokemon = require('../public/javascripts/Pokemon.js');
+// const Pokemon = require('../public/javascripts/Pokemon.js');
 const PowerPoke = require('../public/javascripts/PowerPoke.js');
 const pp = new PowerPoke();
 
 
-async function generate10RandomHomePagePokemon() {
-  const initList = await pp.getPokemonByGeneration();
-  let x;
+async function generate8RandomHomePagePokemon() {
+  const randGenData = await pp.getPokemonByGeneration(null);
+  let randPokeList;
   const randomHomePokes = async () => {
-    x = await pp.get8RandomPokeURLFromInitialFetch(initList);
-    return x;
+    randPokeList = await pp.get8RandomPokeURLFromInitialFetch(randGenData);
+    return randPokeList;
   };
   return randomHomePokes();
 }
@@ -20,7 +20,7 @@ async function generate10RandomHomePagePokemon() {
 /* GET home page. */
 router.get('/', async function(req, res, next) {
   const displayPokes = [];
-  const rand10Pokes = await generate10RandomHomePagePokemon();
+  const rand10Pokes = await generate8RandomHomePagePokemon();
   const outputInfo = async () => {
     for (const [, poke] of Object.entries(rand10Pokes)) {
       displayPokes.push({
@@ -28,8 +28,8 @@ router.get('/', async function(req, res, next) {
         pokeid: poke.id,
         pokesprite: poke.sprite,
         pokegen: poke.gen,
-        poketype1: pp.capitalizeFirstLetterOfNameOrType(poke.type1),
-        poketype2: pp.capitalizeFirstLetterOfNameOrType(poke?.type2),
+        poketype1: pp.capitalizeFirstLetterOfType(poke.type1),
+        poketype2: pp.capitalizeFirstLetterOfType(poke?.type2),
         pokestats: {
           pokeHP: poke.hp,
           pokeATK: poke.attack,

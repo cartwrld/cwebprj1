@@ -1,8 +1,8 @@
 const Pokemon = require('./Pokemon.js');
-const url = require('url');
 
 
-const currentOffset = 0;
+let currentOffset = 20;
+const pokeCount = 20;
 const API_ROOT = 'https://pokeapi.co/api/v2';
 const pokeCollection = [];
 
@@ -30,17 +30,16 @@ class PowerPoke {
 
 
   /**
-     * Initial fetch to get the length of the resultset in order to generate 10 random Pokemon within the boundaries
+     * Initial fetch to get the length of the resultset in order to generate 8 random Pokemon within the boundaries
      * @return {Promise<any|undefined>} - JSON Object
      */
   async getPokemonByGeneration(gen) {
     try {
       const getPokeCountData = async () => {
-        const randGen = gen === undefined || gen === null ? Math.floor((Math.random() * 9) + 1) : gen;
+        const randGen = gen === null ? Math.floor((Math.random() * 9) + 1) : gen;
         const res = await fetch(`${API_ROOT}/generation/${randGen}`);
         if (res.ok) {
           const genPokeData = await res.json();
-          // console.log(genPokeData.pokemon_species);
           return genPokeData;
         }
       };
@@ -57,78 +56,83 @@ class PowerPoke {
      * @return {Promise<*[]>} - Array of 10 random Pokemon objs
      */
   async get8RandomPokeURLFromInitialFetch(initResp) {
-    // console.log('=======================');
-    // console.log(initResp);
-    // console.log('=======================');
     const rndmPokes = [];
     try {
       // 10 times to generate 10 Pokemon
-      const randomNumbers = Array.from({length: 8}, () => Math.floor(Math.random() * initResp.pokemon_species.length) + 1);
-      for (let i = 0; i < 8; i++) {
-        // const randomNum = Math.floor(Math.random() * initResp.results.length); // generate random number is within the resultset
-        // const randomNum = Math.floor(Math.random() * initResp.pokemon_species.length); // generate random number is within the resultset
-        // let randPokeURL = initResp.pokemon_species[randomNum].url;// select the URL of the pokemon in the resultset with the random number
-        let randPokeURL = initResp.pokemon_species[randomNumbers[i]].url;// select the URL of the pokemon in the resultset with the random number
-        randPokeURL = randPokeURL.replace('-species', '');
-        // console.log(randPokeURL + '============');
-        const pokeRes = await fetch(randPokeURL);// fetch with specific URL corresponding to the randomly chosen pokemon
+      const randomNumbers =
+            Array.from({length: 8}, () => Math.floor(Math.random() * initResp.pokemon_species.length) + 1);
 
-        if (pokeRes.ok) {
-          const randPokeData = await pokeRes.json(); // JSON obj
-          // console.log(randPokeData);
+      const rand8Data = randomNumbers.map((i) => {
+        return fetch(`${API_ROOT}/pokemon/${i}`)
+            .then((rand8Res) => {
+              if (rand8Res.ok) {
+                return rand8Res.json();
+              }
+            })
+            .then((rand8Data) => this.buildPokeObj(rand8Data));
+      });
 
-          const randPoke = this.buildPokeObj(randPokeData); // Pokemon obj
-          rndmPokes.push(randPoke);
-        }
-      }
-      return rndmPokes; // Returning an array of 10 Pokemon
+      // Promise.all() collects all of the promises into one, result in an array of Pokemon objs
+      const rand8Pokes = await Promise.all(rand8Data);
+      return rand8Pokes; // Returning an array of 20 Pokemon
     } catch (error) {
       console.error(error);
     }
     return rndmPokes;
   }
 
-  async getFirst20PokeURLFromInitFetch() {
+  /**
+     * This method is responsible for retrieving the first 20 Pokemon to browse as team options.
+     * To deal with long loading times when the page was accessed, this method uses a stream for
+     * retrieving the first 20 items from the API. By using Promise.all() for the entire array
+     * rather than doing one promise at a time, it greatly reduces loading times.
+     * @return {Promise<Awaited<Pokemon>[]|*[]>} First 20 Pokemon
+     */
+  async getFirst20PokeURLFromGenFetch() {
+    try {
+      const first20Poke = Array.from({length: 20}, (_, i) => {
+        return fetch(`${API_ROOT}/pokemon/${i + 1}`)
+            .then((first20Res) => {
+              if (first20Res.ok) {
+                return first20Res.json();
+              }
+            })
+            .then((res20Data) => this.buildPokeObj(res20Data));
+      });
+      return await Promise.all(first20Poke);
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  async getNext20Pokes() {
     const poke20List = [];
     try {
-      let pokeStartNum = 1;
-      // 10 times to generate 10 Pokemon
-      for (let i = 0; i < 20; i++) {
-        // const randomNum = Math.floor(Math.random() * initResp.results.length); // generate random number is within the resultset
-        // const pokeURL = initResp.pokemon_species[i].url;// select the URL of the pokemon in the resultset with the random number
-        const pokeRes = await fetch(`${API_ROOT}/pokemon/${pokeStartNum++}`);// fetch with specific URL corresponding to the randomly chosen pokemon
+      // sequence generator from mdn
+      const offsetCalc = (start, stop, step) =>
+        Array.from({length: (stop - start) / step + 1}, (_, i) => start + i * step);
 
-        if (pokeRes.ok) {
-          const randPokeData = await pokeRes.json(); // JSON obj
-
-          const randPoke = await this.buildPokeObj(randPokeData); // Pokemon obj
-          poke20List.push(randPoke);
-        }
-      }
-      return poke20List; // Returning an array of 20 Pokemon
+      const offsetList = offsetCalc(currentOffset + 1, currentOffset + 20, 1);
+      console.log(offsetList);
+      const next20Poke = offsetList.map((i) => {
+        return fetch(`${API_ROOT}/pokemon/${i}`)
+            .then((next20Res) => {
+              if (next20Res.ok) {
+                return next20Res.json();
+              }
+              throw new Error(`Error fetching Pokemon with ID ${i}`);
+            })
+            .then((next20Data) => this.buildPokeObj(next20Data));
+      });
+      currentOffset += 20;
+      const x = await Promise.all(next20Poke);
+      console.log(x);
     } catch (error) {
       console.error(error);
     }
     return poke20List;
   }
-
-  // async getNext20Pokes() {
-  //   const poke20List = [];
-  //   try {
-  //     for (let i= currentOffset; i<currentOffset + 20; i++) {
-  //       const response = await fetch(`${API_ROOT}pokemon/${i}`);
-  //       if (response.ok) {
-  //         const results = response.json();
-  //         const newPoke = this.buildPokeObj(results);
-  //         poke20List.push(newPoke);
-  //       }
-  //     }
-  //     return poke20List;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  //   return poke20List;
-  // }
   /**
      * Method that can be used for constructing a Pokemon object from the JSON data
      * @param pokeData - JSON Object corresponding to the current random Pokemon
@@ -158,7 +162,7 @@ class PowerPoke {
      */
   formatPokeName(name) {
     if (!name.includes(' ') && !name.includes('.') && !name.includes('-')) {
-      return this.capitalizeFirstLetterOfNameOrType(name);
+      return this.capitalizeFirstLetterOfType(name);
     }
     let formattedName = this.handleOddCharsInName(name, ' ');
     formattedName = this.handleOddCharsInName(formattedName, '-');
@@ -180,7 +184,7 @@ class PowerPoke {
     if (nameVal.includes(char)) {
       const nameArr = nameVal.split(char);
       for (const str of nameArr) {
-        fixedName += this.capitalizeFirstLetterOfNameOrType(str) + char;
+        fixedName += this.capitalizeFirstLetterOfType(str) + char;
       }
       return fixedName;
     } else return nameVal;
@@ -192,7 +196,7 @@ class PowerPoke {
      * @param value - String you would like to capitalize the first letter of
      * @return {string} - The formatted name
      */
-  capitalizeFirstLetterOfNameOrType(value) {
+  capitalizeFirstLetterOfType(value) {
     if (value === null || value === undefined) {
       return;
     }
