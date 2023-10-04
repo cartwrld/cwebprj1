@@ -30,8 +30,10 @@ class PowerPoke {
 
 
   /**
-     * Initial fetch to get the length of the resultset in order to generate 8 random Pokemon within the boundaries
-     * @return {Promise<any|undefined>} - JSON Object
+     * This method is used when the Homepage and TeamBuilder page are loaded.
+     * This function takes in an option Generation number, so that you can set a specific Generation
+     * to fetch, or if nothing is passed in, it will pick a random number between 1-9.
+     * @return {Promise<any|undefined>} - JSON Object containing the info about the Generation called
      */
   async getPokemonByGeneration(gen) {
     try {
@@ -39,10 +41,10 @@ class PowerPoke {
         const randGen = gen === null ? Math.floor((Math.random() * 9) + 1) : gen;
         const res = await fetch(`${API_ROOT}/generation/${randGen}`);
         if (res.ok) {
-          const genPokeData = await res.json();
-          return genPokeData;
+          return await res.json();
         }
       };
+      // returns results from the fetch by generation
       return await getPokeCountData();
     } catch (error) {
       console.error(error);
@@ -50,7 +52,7 @@ class PowerPoke {
   }
 
   /**
-     * Method used to generate 10 random Pokemon when the homepage is initially loaded.
+     * Method used to generate 8 random Pokemon when the homepage is initially loaded.
      * Fetches 10 random Pokemon (may include duplicates) based on the length of the initial resulset.
      * @param initResp - Response from the initial call to get the length of the results
      * @return {Promise<*[]>} - Array of 10 random Pokemon objs
@@ -58,21 +60,25 @@ class PowerPoke {
   async get8RandomPokeURLFromInitialFetch(initResp) {
     const rndmPokes = [];
     try {
-      // 10 times to generate 10 Pokemon
+      // create an array of 10 random numbers that are within the range of the generation
       const randomNumbers =
-            Array.from({length: 8}, () => Math.floor(Math.random() * initResp.pokemon_species.length) + 1);
+                Array.from({length: 8}, () => Math.floor(Math.random() * initResp.pokemon_species.length) + 1);
 
+      // going through each of the random numbers to fetch the pokemon with that ID
       const rand8Data = randomNumbers.map((i) => {
         return fetch(`${API_ROOT}/pokemon/${i}`)
             .then((rand8Res) => {
               if (rand8Res.ok) {
+                // json response is returned as rand8Data below
                 return rand8Res.json();
               }
             })
+            // to here, then a pokemon object is created that corresponds to each of the random numbers
+            // that were created earlier
             .then((rand8Data) => this.buildPokeObj(rand8Data));
       });
 
-      // Promise.all() collects all of the promises into one, result in an array of Pokemon objs
+      // Promise.all() collects all of the promises into one, resulting an array of Pokemon objs
       const rand8Pokes = await Promise.all(rand8Data);
       return rand8Pokes; // Returning an array of 20 Pokemon
     } catch (error) {
@@ -90,20 +96,27 @@ class PowerPoke {
      */
   async getFirst20PokeURLFromGenFetch() {
     try {
+      // stream to generate an array from 1-20, then use the sequencer to iterate through
       const first20Poke = Array.from({length: 20}, (_, i) => {
+        //  starting with pokemon ID #1 to ID #20
         return fetch(`${API_ROOT}/pokemon/${i + 1}`)
             .then((first20Res) => {
               if (first20Res.ok) {
+                // first20Res.json() represents the JSON obj for the call on an individual pokemon,
+                // which is later passed to this.buildPokeObj() to create the pokemon obj
                 return first20Res.json();
               }
             })
+        // return first20Res as res20Data
             .then((res20Data) => this.buildPokeObj(res20Data));
       });
+      // reduced unnecessary variables
       return await Promise.all(first20Poke);
     } catch (error) {
       console.error(error);
-      return [];
     }
+    // reduced unnecessary variables
+    return [];
   }
 
   async getNext20Pokes() {
@@ -126,13 +139,13 @@ class PowerPoke {
             .then((next20Data) => this.buildPokeObj(next20Data));
       });
       currentOffset += 20;
-      const x = await Promise.all(next20Poke);
-      console.log(x);
+      return await Promise.all(next20Poke);
     } catch (error) {
       console.error(error);
     }
     return poke20List;
   }
+
   /**
      * Method that can be used for constructing a Pokemon object from the JSON data
      * @param pokeData - JSON Object corresponding to the current random Pokemon
@@ -140,7 +153,7 @@ class PowerPoke {
      */
   buildPokeObj(pokeData) {
     // console.log(pokeData);
-    const p = new Pokemon(
+    const pokemon = new Pokemon(
         pokeData.name,
         pokeData.id,
         pokeData.sprites?.front_default,
@@ -149,10 +162,10 @@ class PowerPoke {
     );
 
     if (pokeData.types.length > 1) {
-      p.type2 = pokeData.types[1].type.name;
+      pokemon.type2 = pokeData.types[1].type.name;
     }
 
-    return p;
+    return pokemon;
   }
 
   /**
@@ -183,11 +196,15 @@ class PowerPoke {
     let fixedName = '';
     if (nameVal.includes(char)) {
       const nameArr = nameVal.split(char);
+
+      // if name has '-' or '.' or ' ', it will capitalize each name, and put it back together without
+      // the non-letter character
       for (const str of nameArr) {
         fixedName += this.capitalizeFirstLetterOfType(str) + char;
       }
+      // return the fixed name
       return fixedName;
-    } else return nameVal;
+    } else return nameVal; // no changes made
   }
 
   /**
@@ -204,10 +221,12 @@ class PowerPoke {
   }
 
   async handleFiltersApply(nameID, type1, type2, gen) {
+    // if no filters are selected, do nothing
     if (!nameID, !type1, !type2, !gen) {
-
+      return [];
     }
 
+    // convert to lowercase for easy searching
     let filteredPokes;
     nameID = nameID.toLowerCase();
     type1 = type1.toLowerCase();
@@ -215,8 +234,10 @@ class PowerPoke {
     gen = gen.toLowerCase();
 
     const filterHandler = async () => {
+      // return array
       filteredPokes = [];
-      // Conditions where only one criterion is provided
+
+      // if only name or ID is present in search, search directly with name
       if (nameID && !gen && !type1 && !type2) {
         const poke = await this.fetchByNameOrID(nameID);
         filteredPokes.push(poke);
@@ -224,36 +245,48 @@ class PowerPoke {
       }
       // if gen is present in search, search by gen first
       if (gen) {
+        // get the initial gen list
         const genList = await this.fetchByGeneration(gen);
+
+        // GEN ONLY
         if (!type1 && !type2) {
           filteredPokes = genList.filter((poke) => poke.gen === gen);
           return filteredPokes;
         }
+        // GEN + TYPE 1 + TYPE 2
         if (type1 && type2) {
           filteredPokes = genList.filter((poke) => poke.type1 === type1);
           filteredPokes = genList.filter((poke) => poke.type2 === type2);
           return filteredPokes;
         }
+        // GEN + TYPE 1
         if (type1 && !type2) {
           filteredPokes = genList.filter((poke) => poke.type1 === type1);
           return filteredPokes;
         }
+        // GEN + TYPE 1
         if (!type1 && type2) {
           filteredPokes = genList.filter((poke) => poke.type2 === type2);
           return filteredPokes;
         }
       } else {
+        // else if gen is NOT present
         let typeList;
 
+        // TYPE 1 + TYPE 2
         if (type1 && type2) {
+          // get initial list by type
           typeList = await this.fetchByType(type1, 1);
+          // filter out pokes that don't have a matching type 2
           filteredPokes = typeList.filter((poke) => poke.type2 === type2);
           return filteredPokes;
         }
+        // TYPE 1 ONLY
         if (type1 && !type2) {
           filteredPokes = await this.fetchByType(type1, 1);
           return filteredPokes;
         }
+        // TYPE 2 ONLY
         if (!type1 && type2) {
           filteredPokes = await this.fetchByType(type2, 2);
           return filteredPokes;
@@ -262,11 +295,16 @@ class PowerPoke {
     };
 
     await filterHandler();
-
+    // returns array of filtered search results
     return filteredPokes;
   };
 
 
+  /**
+     * This method is used in the searching function to directly fetch a pokemon by name or ID
+     * @param searchNameID
+     * @return {Promise<Pokemon>}
+     */
   async fetchByNameOrID(searchNameID) {
     try {
       const nameRes = await fetch(`${API_ROOT}/pokemon/${searchNameID}/`);
@@ -280,6 +318,12 @@ class PowerPoke {
     }
   }
 
+  /**
+     * This functin is responsible for fetching and creating a list of pokemon objects
+     * when the user applies filters that include "Gen"
+     * @param searchGen
+     * @return {Promise<*[]|undefined>}
+     */
   async fetchByGeneration(searchGen) {
     try {
       const getGenOnlySearchResults = async () => {
@@ -289,6 +333,7 @@ class PowerPoke {
           const filteredGenPokes = [];
 
           for (const poke of genData.pokemon_species) {
+            // getting rid of the -species in order to directly fetch pokemon
             const pokeURL = poke.url.replace('-species', '');
             const pokeGenRes = await fetch(pokeURL); // fetch with specific URL corresponding to the randomly chosen pokemon
 
@@ -297,6 +342,7 @@ class PowerPoke {
               filteredGenPokes.push(this.buildPokeObj(genPokeData));
             }
           }
+          // list of pokemon obj that meet the gen search criteria
           return filteredGenPokes;
         }
       };
@@ -306,6 +352,13 @@ class PowerPoke {
     }
   }
 
+  /**
+     * This function is responsible for returning a list of pokemon based on type filters that
+     * have been applied. Very similar to fetchByGeneration()
+     * @param searchType
+     * @param typeNum
+     * @return {Promise<*[]|undefined>}
+     */
   async fetchByType(searchType, typeNum) {
     try {
       const getTypeOnlySearchResults = async () => {
@@ -315,6 +368,8 @@ class PowerPoke {
           const filteredTypePokes = [];
 
           for (const poke of typeData.pokemon) {
+            // if the slot number of the pokemon matches the typeNum we passed in (either 1 or 2)
+            // slot determines if it is type1 or type 2
             if (poke.slot === typeNum) {
               const pokeTypeRes = await fetch(poke.pokemon.url); // fetch with specific URL corresponding to the randomly chosen pokemon
               if (pokeTypeRes.ok) {
@@ -331,6 +386,21 @@ class PowerPoke {
       console.error(error);
     }
   }
+
+  async outputFilteredPokes(pokeList) {
+    const pokeInfoList = [];
+    for (const [, poke] of Object.entries(pokeList)) {
+      pokeInfoList.push({
+        pokename: this.formatPokeName(poke.name),
+        pokeid: poke.id,
+        pokesprite: poke.sprite,
+        poketype1: this.capitalizeFirstLetterOfType(poke.type1),
+        poketype2: this.capitalizeFirstLetterOfType(poke?.type2),
+        multitype: poke.type2 !== undefined,
+      });
+    }
+    return pokeInfoList;
+  };
 }
 
 

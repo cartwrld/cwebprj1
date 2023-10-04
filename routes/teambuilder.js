@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const PowerPoke = require('../public/javascripts/PowerPoke');
-
 const pp = new PowerPoke();
+
 let displayPokes;
 
 
@@ -27,26 +27,26 @@ async function addNext20PokesToList() {
   };
   return gen20PokesForTeamOptions();
 }
-const outputFilteredPokes = async (pokeList) => {
-  const pokeInfoList = [];
-  for (const [, poke] of Object.entries(pokeList)) {
-    pokeInfoList.push({
-      pokename: pp.formatPokeName(poke.name),
-      pokeid: poke.id,
-      pokesprite: poke.sprite,
-      poketype1: pp.capitalizeFirstLetterOfType(poke.type1),
-      poketype2: pp.capitalizeFirstLetterOfType(poke?.type2),
-      multitype: poke.type2 !== undefined,
-    });
-  }
-  return pokeInfoList;
-};
+// const outputFilteredPokes = async (pokeList) => {
+//   const pokeInfoList = [];
+//   for (const [, poke] of Object.entries(pokeList)) {
+//     pokeInfoList.push({
+//       pokename: pp.formatPokeName(poke.name),
+//       pokeid: poke.id,
+//       pokesprite: poke.sprite,
+//       poketype1: pp.capitalizeFirstLetterOfType(poke.type1),
+//       poketype2: pp.capitalizeFirstLetterOfType(poke?.type2),
+//       multitype: poke.type2 !== undefined,
+//     });
+//   }
+//   return pokeInfoList;
+// };
 
 // http://localhost:3000/pokedex/
 /* GET home page. */
 router.get('/', async function(req, res, next) {
   const poke20List = await genFirst20PokeForTeamOptions();
-  displayPokes = await outputFilteredPokes(poke20List);
+  displayPokes = await pp.outputFilteredPokes(poke20List);
   console.log('++++++++++++');
   // console.log(displayPokes);
   console.log('++++++++++++');
@@ -66,7 +66,7 @@ router.get('/', async function(req, res, next) {
 router.get('/more', async (req, res, next) => {
   const next20Pokes = await addNext20PokesToList();
 
-  const next20Info = await outputFilteredPokes(next20Pokes);
+  const next20Info = await pp.outputFilteredPokes(next20Pokes);
   displayPokes += next20Info;
 
 
@@ -76,7 +76,7 @@ router.get('/more', async (req, res, next) => {
   console.log(displayPokes);
   console.log('=============');
 
-  for ((let prop in obj)
+  // for ((let prop in obj)
   // displayPokes.push(next20Info);
 
   await res.render('teambuilder', {
@@ -92,7 +92,7 @@ router.post('/filters', async (req, res, next) => {
 
   const filteredPokes = await pp.handleFiltersApply(
       req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);
-  displayPokes = await outputFilteredPokes(filteredPokes);
+  displayPokes = await pp.outputFilteredPokes(filteredPokes);
 
   await res.render('teambuilder', {
     sbmtNameID: req.body.searchNameID, // submitted searchNameID from post

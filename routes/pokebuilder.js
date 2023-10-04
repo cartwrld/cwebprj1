@@ -71,12 +71,12 @@ router.get('/',
 
 router.post('/preview',
     [
-      body('name').trim().notEmpty().withMessage('PokeName is required').bail()
+      body('name').trim().notEmpty().withMessage('PokeName is required!').bail()
           .isLength({min: 2, max: 20}).withMessage('Name must have between 2 and 20 letters'),
-      body('type1').notEmpty().withMessage('PokeType is required').bail()
+      body('type1').notEmpty().withMessage('PokeType is required!').bail()
           .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
           .withMessage('Invalid PokeType')
-          .notEmpty().withMessage('You must choose at least 1 PokeType'),
+          .notEmpty().withMessage('You must choose at least 1 PokeType!'),
       body('hp').trim().notEmpty().withMessage('HP Stat is required!').bail()
           .isNumeric().withMessage('Please enter a value between 1 and 999'),
       body('atk').trim().notEmpty().withMessage('ATK Stat is required!').bail()

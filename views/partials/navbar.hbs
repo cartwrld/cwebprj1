@@ -1,40 +1,78 @@
-<nav class="navbar navbar-expand-lg bg-danger col-12 mb-3" data-bs-theme="dark">
-    <div class="container-fluid">
-        <div class="container-fluid d-flex justify-content-evenly align-items-center flex-nowrap">
-            <a class="navbar-brand" href="#"><img src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png"
-                                                  alt="Poke Ball" width="50px" height="50px"></a>
+<!--<nav class="navbar navbar-expand-lg bg-danger col-12 mb-3" data-bs-theme="dark">-->
+<!--    <div class="container-fluid">-->
 
-            <div class="container d-flex justify-content-start align-items-center">
-                <h2 class="text-light m-0 p-0">PowerPoke</h2>
+<!--        &lt;!&ndash; Logo, Title, and Toggle button &ndash;&gt;-->
+<!--        <div class="d-flex justify-content-between align-items-center">-->
+<!--            &lt;!&ndash; Logo on the left &ndash;&gt;-->
+<!--            <a class="navbar-brand" href="#">-->
+<!--                <img src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" alt="Poke Ball" width="50px" height="50px">-->
+<!--            </a>-->
 
+<!--            &lt;!&ndash; Centered title &ndash;&gt;-->
+<!--            <h2 class="text-light m-0 p-0">PowerPoke</h2>-->
+
+<!--            &lt;!&ndash; Toggle button on the right &ndash;&gt;-->
+<!--            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Collapsible nav links centered &ndash;&gt;-->
+<!--        <div class="collapse navbar-collapse justify-content-center" id="navbarColor02">-->
+<!--            <ul class="navbar-nav">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link {{#if homepage}}active{{/if}}" href="/">Home-->
+<!--                        <span class="visually-hidden">(current)</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link {{#if pokebuilder}}active{{/if}}" href="/pokebuilder/">PokeBuilder-->
+<!--                        <span class="visually-hidden">(current)</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link {{#if teambuilder}}active{{/if}}" href="/teambuilder/">Team Builder-->
+<!--                        <span class="visually-hidden">(current)</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<nav class="navbar navbar-expand-lg bg-danger navbar-dark sticky-top shadow">
+    <div class="container-fluid ">
+
+        <div class="container-fluid text-center d-flex flex-row flex wrap  align-items-center">
+            <a class="navbar-brand" href="#">
+                <img src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" alt="Poke Ball" width="50px" height="50px">
+            </a>
+            <div class="container-fluid ">
+                <div class="navbar-text text-center text-white h2 h6-xl">PowerPoke</div>
             </div>
-
-
-            <div class="container d-flex justify-content-start align-items-center">
-                <div class="collapse navbar-collapse" id="navbarColor02">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link {{#if homepage}}active{{/if}}" href="/">Home
-                                <span class="visually-hidden">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{#if pokebuilder}}active{{/if}}" href="/pokebuilder/">PokeBuilder
-                                <span class="visually-hidden">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{#if teambuilder}}active{{/if}}" href="/teambuilder/">Team Builder
-                                <span class="visually-hidden">(current)</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02"
-                    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler mt-xl-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+        </div>
+        <div class="container-fluid collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav container">
+                <li class="nav-item">
+                    <a class="nav-link {{#if homepage}}active{{/if}}" href="/">Home
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{#if pokebuilder}}active{{/if}}" href="/pokebuilder/">PokeBuilder
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{#if teambuilder}}active{{/if}}" href="/teambuilder/">Team Builder
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

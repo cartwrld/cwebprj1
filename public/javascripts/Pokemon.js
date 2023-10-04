@@ -1,4 +1,12 @@
 class Pokemon {
+  /**
+   * Constructor for the Pokemon object
+   * @param name - the pokemon name
+   * @param id - the pokemon id
+   * @param sprite - the pokemon image src
+   * @param stats - the pokemon stats (hp, atk, def, spatk, spdef, spd)
+   * @param type1 - the main type of the pokemon
+   */
   constructor(name, id, sprite, stats, type1) {
     this.name = name;
     this.id = id;
@@ -25,21 +33,6 @@ class Pokemon {
       specDef: statsObj[4].base_stat,
       speed: statsObj[5].base_stat,
     };
-  }
-
-  /**
-   * Function that will return an array with the types.
-   * @return {*[]} - [type1] or [type1,type2]
-   */
-  getPokeTypes() {
-    const typeArr = [];
-    if (this.type2 !== undefined) {
-      typeArr.push(this.type1);
-      typeArr.push(this.type2);
-    } else {
-      typeArr.push(this.type1);
-    }
-    return typeArr;
   }
 
   /**
