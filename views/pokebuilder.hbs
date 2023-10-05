@@ -1,5 +1,5 @@
 <div class="container d-flex flex-column flex-lg-row justify-content-around align-items-center">
-    <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2 col-lg-8">
+    <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2 col-lg-7 mx-2">
         <h2 class="p-0 m-0 pb-3 pt-2 text-light">Build Your Own Pokemon</h2>
         <!-- inner base container -->
         <div class="container-fluid d-flex flex-column justify-content-around align-content-center bg-light
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                     <!-- Stats Input Container -->
-                    <div class="container d-flex flex-column justify-content-between align-items-center py-4 pb-4 mt-3 bg-body-secondary border border-black rounded-2">
+                    <div class="container d-flex flex-column justify-content-between align-items-center py-4 pb-4 mt-3 bg-body-secondary border border-danger-subtle rounded-2">
                         <div class="container d-flex flex-row justify-content-between align-items-center">
                             <h4>PokeStats</h4>
                         </div>
@@ -173,7 +173,7 @@
                         </div>
                     </div>
                     <!-- Photo Upload -->
-                    <div class="container-fluid d-flex flex-column py-3 mt-3 bg-body-secondary border border-black rounded-2">
+                    <div class="container-fluid d-flex flex-column py-3 mt-3 bg-body-secondary border border-danger-subtle rounded-2">
                         <div class="container d-flex flex-row justify-content-between align-items-center">
                             <h4>Upload PokePhoto</h4>
                         </div>
@@ -186,7 +186,7 @@
                         </div>
                     </div>
                     <!-- Description Textarea -->
-                    <div class="container-fluid d-flex flex-column py-3 mt-3 bg-body-secondary border border-black rounded-2">
+                    <div class="container-fluid d-flex flex-column py-3 mt-3 bg-body-secondary border border-danger-subtle rounded-2">
                         <div class="container d-flex flex-row justify-content-between align-items-center">
                             <h4>PokeDescription</h4>
                         </div>
@@ -211,45 +211,60 @@
 
         </div>
     </div>
-    <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2">
+    <div class="container-fluid mt-3 container-xxl bg-danger text-center rounded-4 py-2 mx-2">
         <h2 class="p-0 m-0 pb-3 pt-2 text-light">PokePreview</h2>
         <!-- inner base container -->
         <div class="container-fluid d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
     rounded-3 mb-0">
-            <div class="card">
-                <div>
-                    <img src="{{smbtPhoto.imgsrc}}" alt="{{smbtPhoto.info}}">
+            <div class="card my-3">
+                <div class="col-12">
+                    {{#each smbtPhoto}}
+                        <img src="{{imgsrc}}" alt="{{smbtPhoto.info}}" class="col-11 rounded mt-4">
+                    {{/each}}
                 </div>
 
+                <h3 class="py-2 pt-3">{{sbmtName}}</h3>
 
-                <div><p></p><strong>Name:</strong>{{sbmtName}}</div>
-                <div class="container d-flex justify-content-around align-items-center">
-                    <div><p><strong>Type 1:</strong><br>{{sbmtType1}}</p></div>
-                    <div><p><strong>Type 2:</strong><br>{{sbmtType2}}</p></div>
+                <div class="container-fluid d-flex justify-content-center align-items-center">
+                    <!-- inner type2 container -->
+                    {{#if multitype}}
+                        <div class="container bg-body-tertiary border border-danger-subtle border-2 col-6 rounded-start d-flex justify-content-center align-items-center">
+                            <h5 class="text-center col-12 pt-2">{{sbmtType1}}</h5>
+                        </div>
+                        <!-- inner type2 container -->
+                        <div class="container bg-body-tertiary border border-danger-subtle border-2 col-6 rounded-end">
+                            <h5 class="text-center col-12 pt-2">{{sbmtType2}}</h5>
+                        </div>
+                    {{else}}
+                        <div class="container bg-body-tertiary border border-danger-subtle border-2 col-7 mx-5 rounded">
+                            <h5 class="text-center col-12 pt-2">{{sbmtType1}}</h5>
+                        </div>
+                    {{/if}}
                 </div>
-                <div class="container d-flex justify-content-around align-items-center">
-                    <div>
-
+                <div class="container d-flex justify-content-around align-items-end my-3">
+                    <div class="col-2">
                         <p><strong>HP:</strong><br>{{sbmtHP}}</p>
                     </div>
-                    <div>
+                    <div class="col-2">
                         <p><strong>ATK:</strong><br>{{sbmtATK}}</p>
                     </div>
-                    <div>
+                    <div class="col-2">
                         <p><strong>DEF:</strong><br>{{sbmtDEF}}</p>
                     </div>
-                    <div>
+                    <div class="col-2">
                         <p><strong>SP. ATK:</strong><br>{{sbmtSPATK}}</p>
                     </div>
-                    <div>
+                    <div class="col-2">
                         <p><strong>SP. DEF:</strong><br>{{sbmtSPDEF}}</p>
                     </div>
-                    <div>
+                    <div class="col-2">
                         <p><strong>SPD:</strong><br>{{sbmtSPD}}</p>
                     </div>
                 </div>
-                <div><p><strong>Description:</strong></p>
-                    <p>{{#each sbmtDesc}}{{pokedesc}}{{/each}}</p></div>
+            <div class="container d-flex flex-column justify-content-around align-items-center mt-0 mb-4">
+                    <p class="m-0"><strong>Description:</strong></p>
+                    {{#each sbmtDesc}}{{pokedesc}}{{/each}}
+                </div>
             </div>
         </div>
     </div>

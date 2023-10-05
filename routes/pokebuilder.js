@@ -126,9 +126,9 @@ router.post('/preview', upload.single('photo'),
         } else {
           imageProps = [{
             info: req.file.originalname,
-            imgsrc: `D:/GitHub/cwebproj1/public/images/${req.file.filename}-${req.file.originalname}`,
+            imgsrc: `/images/${req.file.filename}-${req.file.originalname}`,
           }];
-          moveFile(req.file, 'D:/GitHub/cwebprj1/public/images/');
+          moveFile(req.file, 'D:\\GitHub\\cwebprj1\\public\\images\\');
         }
       }
       for (const x of imageProps) {
@@ -138,6 +138,10 @@ router.post('/preview', upload.single('photo'),
       const desctext = [{pokedesc: req.body.desc}];
       console.log('desc post: ' + desctext);
       console.log('imageprops post: ' + imageProps);
+
+      const multi = req.body.type2;
+
+      console.log(multi);
 
       res.render('pokebuilder', {
         pokebuilder: true,
@@ -154,7 +158,7 @@ router.post('/preview', upload.single('photo'),
         sbmtSPD: req.body.spd,
         smbtPhoto: imageProps,
         sbmtDesc: desctext,
-
+        multitype: req.body.type2 !== '',
         submitted: true,
         err: errorMessages,
       });

@@ -1,34 +1,11 @@
 const Pokemon = require('./Pokemon.js');
+const createHttpError = require('http-errors');
 
 
 let currentOffset = 20;
-const pokeCount = 20;
 const API_ROOT = 'https://pokeapi.co/api/v2';
-const pokeCollection = [];
-
 
 class PowerPoke {
-  // async genPokeObjCollection() {
-  //   if (pokeCollection.length === 0) {
-  //     const res = await fetch(`${API_ROOT}pokemon?limit=1015&offset=0`);
-  //     if (res.ok) {
-  //       const collectionData = await res.json();
-  //       for (let i = 0; i < 1015; i++) {
-  //         const pokeRes = await fetch(collectionData.results[i].url);
-  //         if (pokeRes.ok) {
-  //           const pokeData = await pokeRes.json();
-  //           pokeCollection.push(this.buildPokeObj(pokeData));
-  //         }
-  //       }
-  //       console.log('pokecollection created');
-  //       return await collectionData;
-  //     } else {
-  //       console.log('not ok');
-  //     }
-  //   }
-  // }
-
-
   /**
      * This method is used when the Homepage and TeamBuilder page are loaded.
      * This function takes in an option Generation number, so that you can set a specific Generation
@@ -247,43 +224,43 @@ class PowerPoke {
       if (gen) {
         // get the initial gen list
         const genList = await this.fetchByGeneration(gen);
-
+        filteredPokes = await genList;
         // GEN ONLY
         if (!type1 && !type2) {
-          filteredPokes = genList.filter((poke) => poke.gen === gen);
+          // filteredPokes = genList.filter((poke) => poke.gen === gen);
+          filteredPokes.sort((p1, p2) => p1.id - p2.id);
           return filteredPokes;
         }
         // GEN + TYPE 1 + TYPE 2
         if (type1 && type2) {
-          filteredPokes = genList.filter((poke) => poke.type1 === type1);
-          filteredPokes = genList.filter((poke) => poke.type2 === type2);
+          filteredPokes = filteredPokes.filter((poke) => poke.type1 === type1);
+          filteredPokes = filteredPokes.filter((poke) => poke.type2 === type2);
           return filteredPokes;
         }
         // GEN + TYPE 1
         if (type1 && !type2) {
-          filteredPokes = genList.filter((poke) => poke.type1 === type1);
+          filteredPokes = filteredPokes.filter((poke) => poke.type1 === type1);
           return filteredPokes;
         }
         // GEN + TYPE 1
         if (!type1 && type2) {
-          filteredPokes = genList.filter((poke) => poke.type2 === type2);
+          filteredPokes = filteredPokes.filter((poke) => poke.type2 === type2);
           return filteredPokes;
         }
-      } else {
+      }
+      if (!gen) {
         // else if gen is NOT present
-        let typeList;
-
+        const typeList = await this.fetchByType(type1, 1); // get initial list by type
+        console.log(typeList);
+        filteredPokes = await typeList;
         // TYPE 1 + TYPE 2
         if (type1 && type2) {
-          // get initial list by type
-          typeList = await this.fetchByType(type1, 1);
           // filter out pokes that don't have a matching type 2
           filteredPokes = typeList.filter((poke) => poke.type2 === type2);
           return filteredPokes;
         }
         // TYPE 1 ONLY
         if (type1 && !type2) {
-          filteredPokes = await this.fetchByType(type1, 1);
           return filteredPokes;
         }
         // TYPE 2 ONLY
@@ -330,18 +307,20 @@ class PowerPoke {
         const genRes = await fetch(`${API_ROOT}/generation/${searchGen}/`);
         if (genRes.ok) {
           const genData = await genRes.json();
+
           const filteredGenPokes = [];
 
           for (const poke of genData.pokemon_species) {
-            // getting rid of the -species in order to directly fetch pokemon
+          // getting rid of the -species in order to directly fetch pokemon
             const pokeURL = poke.url.replace('-species', '');
             const pokeGenRes = await fetch(pokeURL); // fetch with specific URL corresponding to the randomly chosen pokemon
-
+            // console.log(pokeGenRes);
             if (pokeGenRes.ok) {
               const genPokeData = await pokeGenRes.json();
               filteredGenPokes.push(this.buildPokeObj(genPokeData));
             }
           }
+          console.log(filteredGenPokes);
           // list of pokemon obj that meet the gen search criteria
           return filteredGenPokes;
         }
@@ -401,6 +380,20 @@ class PowerPoke {
     }
     return pokeInfoList;
   };
+
+  async getGenNumberRange(gen) {
+    switch (gen) {
+      case 1: return [1, 151];
+      case 2: return [152, 251];
+      case 3: return [252, 386];
+      case 4: return [387, 494];
+      case 5: return [495, 649];
+      case 6: return [650, 721];
+      case 7: return [722, 807];
+      case 8: return [808, 896];
+      case 9: return [897, 1017];
+    }
+  }
 }
 
 
