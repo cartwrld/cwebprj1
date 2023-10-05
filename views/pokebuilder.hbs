@@ -5,7 +5,7 @@
         <div class="container-fluid d-flex flex-column justify-content-around align-content-center bg-light
     rounded-3 mb-0">
 
-            <form action="/pokebuilder/preview" method="post" >
+            <form action="/pokebuilder/preview" method="post" enctype="multipart/form-data">
                 <div class="container d-flex flex-column justify-content-center align-items-center">
                     <div class="container d-flex flex-column align-items-center py-3 mt-5 mb-3 bg-body-secondary border border-black rounded-2">
                         <div class="container d-flex flex-row justify-content-between align-items-center">
@@ -14,7 +14,8 @@
                         <div class="container d-flex align-items-center pt-3 pb-2">
                             <label for="name" class="col-3 text-start">Name:</label>
                             <div class="col-9">
-                                <input class="form-control pe-0  {{#if err.name}}is-invalid{{/if}}" type="text" id="name" name="name"
+                                <input class="form-control pe-0  {{#if err.name}}is-invalid{{/if}}" type="text"
+                                       id="name" name="name"
                                        placeholder="Enter a name" value="{{sbmtName}}" required>
                                 <div class="invalid-feedback">{{err.name}}</div>
                             </div>
@@ -28,7 +29,8 @@
                             <div class="container-fluid d-flex flex-row align-items-center mb-2">
                                 <label for="type1" class="col-3 text-start">Type 1:</label>
                                 <div class="col-9">
-                                    <select class="form-select {{#if err.type1}}is-invalid{{/if}}" id="type1" name="type1" required>
+                                    <select class="form-select {{#if err.type1}}is-invalid{{/if}}" id="type1"
+                                            name="type1" required>
                                         <option value="" selected></option>
                                         <option value="Normal" {{#if (equals sbmtType1 "Normal")}}selected{{/if}}>Normal
                                         </option>
@@ -114,7 +116,7 @@
                                         <option value="Fairy" {{#if (equals sbmtType2 "Fairy")}}selected{{/if}}>Fairy
                                         </option>
                                     </select>
-<!--                                    <div class="invalid-feedback">{{err.ty}}</div>-->
+                                    <!--                                    <div class="invalid-feedback">{{err.ty}}</div>-->
                                 </div>
                             </div>
                         </div>
@@ -128,38 +130,44 @@
                             <!-- HP Input -->
                             <div class="d-flex flex-column align-items-center">
                                 <label for="hp" class="mb-1 text-center">HP</label>
-                                <input class="form-control {{#if err.hp}}is-invalid{{/if}}" id="hp" name="hp" min="1" max="999" value="{{sbmtHP}}" required>
+                                <input class="form-control {{#if err.hp}}is-invalid{{/if}}" id="hp" name="hp" min="1"
+                                       max="999" value="{{sbmtHP}}" required>
                                 <div class="invalid-feedback">{{err.hp}}</div>
                             </div>
                             <!-- Attack Input -->
                             <div class="d-flex flex-column align-items-center">
                                 <label for="atk" class="mb-1 text-center">ATK</label>
-                                <input class="form-control {{#if err.atk}}is-invalid{{/if}}" id="atk" name="atk" min="1" max="999" value="{{sbmtATK}}" required>
+                                <input class="form-control {{#if err.atk}}is-invalid{{/if}}" id="atk" name="atk" min="1"
+                                       max="999" value="{{sbmtATK}}" required>
                                 <div class="invalid-feedback">{{err.atk}}</div>
                             </div>
                             <!-- Defense Input -->
                             <div class="d-flex flex-column align-items-center">
                                 <label for="def" class="mb-1 text-center">DEF</label>
-                                <input class="form-control {{#if err.def}}is-invalid{{/if}}" id="def" name="def" min="1" max="999" value="{{sbmtDEF}}"
+                                <input class="form-control {{#if err.def}}is-invalid{{/if}}" id="def" name="def" min="1"
+                                       max="999" value="{{sbmtDEF}}"
                                        required>
                                 <div class="invalid-feedback">{{err.def}}</div>
                             </div>
                             <!-- Special Attack Input -->
                             <div class="d-flex flex-column align-items-center">
                                 <label for="spatk" class="mb-1 text-center">SP.ATK</label>
-                                <input class="form-control {{#if err.spatk}}is-invalid{{/if}}" id="spatk" name="spatk" min="1" max="999" value="{{sbmtSPATK}}" required>
+                                <input class="form-control {{#if err.spatk}}is-invalid{{/if}}" id="spatk" name="spatk"
+                                       min="1" max="999" value="{{sbmtSPATK}}" required>
                                 <div class="invalid-feedback">{{err.spatk}}</div>
                             </div>
                             <!-- Special Defense Input -->
                             <div class="d-flex flex-column align-items-center">
                                 <label for="spdef" class="mb-1 text-center">SP.DEF</label>
-                                <input class="form-control {{#if err.spdef}}is-invalid{{/if}}" id="spdef" name="spdef" min="1" max="999" value="{{sbmtSPDEF}}" required>
+                                <input class="form-control {{#if err.spdef}}is-invalid{{/if}}" id="spdef" name="spdef"
+                                       min="1" max="999" value="{{sbmtSPDEF}}" required>
                                 <div class="invalid-feedback">{{err.spdef}}</div>
                             </div>
                             <!-- Speed Input -->
                             <div class="d-flex flex-column align-items-center">
                                 <label for="spd" class="mb-1 text-center">SPD</label>
-                                <input class="form-control {{#if err.spd}}is-invalid{{/if}}" id="spd" name="spd" min="1" max="999" value="{{sbmtSPD}}" required>
+                                <input class="form-control {{#if err.spd}}is-invalid{{/if}}" id="spd" name="spd" min="1"
+                                       max="999" value="{{sbmtSPD}}" required>
                                 <div class="invalid-feedback">{{err.spd}}</div>
                             </div>
                         </div>
@@ -171,7 +179,8 @@
                         </div>
                         <div class="container d-flex align-items-center pt-3 pb-2">
                             <div class="col-12">
-                                <input type="file" id="photo" class="form-control {{#if err.photo}}is-invalid{{/if}}" name="photo" required/>
+                                <input type="file" id="photo" class="form-control {{#if err.photo}}is-invalid{{/if}}"
+                                       name="photo" required value="{{sbmtPhoto.info}}"/>
                                 <div class="invalid-feedback">{{err.photo}}</div>
                             </div>
                         </div>
@@ -185,7 +194,8 @@
                             <div class="col-12">
                                 <label for="desc"></label>
                                 <textarea class="form-control col-12 text-dark {{#if err.desc}}is-invalid{{/if}}"
-                                          id="desc" name="desc" rows="4" minlength="1" maxlength="500" required>{{sbmtDesc}}</textarea>
+                                          placeholder="Enter Pokemon description" id="desc" name="desc"
+                                          rows="3"></textarea>
 
                                 <div class="invalid-feedback">{{err.desc}}</div>
                             </div>
@@ -207,19 +217,39 @@
         <div class="container-fluid d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
     rounded-3 mb-0">
             <div class="card">
-                <img src="{{imgsrc}}" title="{{sbmtName}}">
-                <div><p></p>Name: {{sbmtName}}</div>
-                <div><p>Type 1: {{sbmtType1}}</div>
-                <div><p>Type 2: {{sbmtType2}}</div>
                 <div>
-                        <p>HP: {{sbmtHP}}</p>
-                        <p>ATK: {{sbmtATK}}</p>
-                        <p>DEF: {{sbmtDEF}}</p>
-                        <p>SP. ATK: {{sbmtSPATK}}</p>
-                        <p>SP. DEF: {{sbmtSPDEF}}</p>
-                        <p>SPD: {{sbmtSPD}}</p>
+                    <img src="{{smbtPhoto.imgsrc}}" alt="{{smbtPhoto.info}}">
                 </div>
-                <div><p>Description: </p><p>{{sbmtDesc}}</p></div>
+
+
+                <div><p></p><strong>Name:</strong>{{sbmtName}}</div>
+                <div class="container d-flex justify-content-around align-items-center">
+                    <div><p><strong>Type 1:</strong><br>{{sbmtType1}}</p></div>
+                    <div><p><strong>Type 2:</strong><br>{{sbmtType2}}</p></div>
+                </div>
+                <div class="container d-flex justify-content-around align-items-center">
+                    <div>
+
+                        <p><strong>HP:</strong><br>{{sbmtHP}}</p>
+                    </div>
+                    <div>
+                        <p><strong>ATK:</strong><br>{{sbmtATK}}</p>
+                    </div>
+                    <div>
+                        <p><strong>DEF:</strong><br>{{sbmtDEF}}</p>
+                    </div>
+                    <div>
+                        <p><strong>SP. ATK:</strong><br>{{sbmtSPATK}}</p>
+                    </div>
+                    <div>
+                        <p><strong>SP. DEF:</strong><br>{{sbmtSPDEF}}</p>
+                    </div>
+                    <div>
+                        <p><strong>SPD:</strong><br>{{sbmtSPD}}</p>
+                    </div>
+                </div>
+                <div><p><strong>Description:</strong></p>
+                    <p>{{#each sbmtDesc}}{{pokedesc}}{{/each}}</p></div>
             </div>
         </div>
     </div>

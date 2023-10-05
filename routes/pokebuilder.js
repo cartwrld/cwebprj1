@@ -20,10 +20,8 @@ router.get('/',
       query('name').if(query('name').exists())
           .trim().notEmpty().withMessage('PokeName is required').bail()
           .isLength({min: 2, max: 20}).withMessage('Name must have between 2 and 20 letters'),
-      // query('type1').if(query('type1').exists()).withMessage('Type is required')
-      //     .notEmpty().withMessage('You must choose at least 1 PokeType')
-      //     .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground',
-      //       'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
+      // query('type1')
+      //     .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
       //     .withMessage('Invalid PokeType')
       //     .notEmpty().withMessage('You must choose at least 1 PokeType'),
       query('hp').if(query('hp').exists()).trim().notEmpty().withMessage('HP Stat is required').bail()
@@ -38,6 +36,7 @@ router.get('/',
           .isNumeric().withMessage('Please enter a value between 1 and 999'),
       query('spd').if(query('spd').exists()).trim().notEmpty().withMessage('SPD Stat is required').bail()
           .isNumeric().withMessage('Please enter a value between 1 and 999'),
+
       query('desc').if(query('desc').exists()).trim().notEmpty()
           .withMessage('You must enter a description for your Pokemon').bail().isLength({min: 10, max: 500})
           .withMessage('Please shorten the length of your description to 500 characters or less'),
@@ -69,11 +68,11 @@ router.get('/',
       });
     });
 
-router.post('/preview',
+router.post('/preview', upload.single('photo'),
     [
       body('name').trim().notEmpty().withMessage('PokeName is required').bail()
           .isLength({min: 2, max: 20}).withMessage('Name must have between 2 and 20 letters'),
-      body('type1').notEmpty().withMessage('PokeType is required').bail()
+      body('type1')
           .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
           .withMessage('Invalid PokeType')
           .notEmpty().withMessage('You must choose at least 1 PokeType'),
@@ -89,7 +88,25 @@ router.post('/preview',
           .isNumeric().withMessage('Please enter a value between 1 and 999'),
       body('spd').trim().notEmpty().withMessage('SPD Stat is required!').bail()
           .isNumeric().withMessage('Please enter a value between 1 and 999'),
-      body('photo').trim().notEmpty().withMessage('PokePhoto is required!').bail(),
+      // body('photo').trim().notEmpty().withMessage('PokePhoto is required!').bail(),
+      body('photo').custom((value, {req}) => {
+        // Check if photo exists
+        if (!req.file) {
+          throw new Error('No file uploaded');
+        }
+
+        // Check file size
+        if (req.file.size < 1024 || req.file.size > (2 * 1024 * 1024)) {
+          throw new Error('Uploaded file must be at least 1KB and at most 2MB');
+        }
+
+        // Check mimetype
+        if (!req.file.mimetype.startsWith('image/')) {
+          throw new Error('Uploaded file must have an image MimeType');
+        }
+
+        return true;
+      }),
       body('desc').trim().notEmpty().withMessage('You must enter a description for your Pokemon!').bail()
           .isLength({min: 1, max: 500})
           .withMessage('Please shorten the length of your description to 500 characters or less'),
@@ -99,27 +116,28 @@ router.post('/preview',
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
       console.log(errorMessages);
-      console.log(req.files);
+      console.log(req.file);
 
-      const imageProps = [];
+      let imageProps;
 
+      if (req.file) {
+        if (errorMessages['photo']) {
+          fs.unlinkSync(req.file.path);
+        } else {
+          imageProps = [{
+            info: req.file.originalname,
+            imgsrc: `D:/GitHub/cwebproj1/public/images/${req.file.filename}-${req.file.originalname}`,
+          }];
+          moveFile(req.file, 'D:/GitHub/cwebprj1/public/images/');
+        }
+      }
+      for (const x of imageProps) {
+        console.log(x);
+      }
 
-      // for (const [field, fileArray] of Object.entries(req.files)) {
-      //   for (const tempfile of fileArray) {
-      //     // if errorMessage exists for title1, file1, or title2, file2, then delete the file.
-      //     // if (errorMessages['title' + tmpNum] || errorMessages['file' + tmpNum]) {
-      //     //   fs.unlinkSync(tempfile.path);
-      //     // } else {
-      //     // add code to the displayItArray that will show file info to the user
-      //     imageProps.push({
-      //       info: tempfile.originalname,
-      //       imgsrc: `/images/${tempfile.filename}-${tempfile.originalname}`,
-      //     },
-      //     );
-      //     moveFile(tempfile, 'D:\\GitHub\\cwebprj1\\public\\images\\');
-      //     // }
-      //   }
-      // }
+      const desctext = [{pokedesc: req.body.desc}];
+      console.log('desc post: ' + desctext);
+      console.log('imageprops post: ' + imageProps);
 
       res.render('pokebuilder', {
         pokebuilder: true,
@@ -135,7 +153,7 @@ router.post('/preview',
         sbmtSPDEF: req.body.spdef,
         sbmtSPD: req.body.spd,
         smbtPhoto: imageProps,
-        smbtDesc: req.body.desc,
+        sbmtDesc: desctext,
 
         submitted: true,
         err: errorMessages,
@@ -144,9 +162,9 @@ router.post('/preview',
 
 
 /**
- * @param {MulterFileInfo} tempFile
- * @param {string} newPath
- */
+         * @param {MulterFileInfo} tempFile
+         * @param {string} newPath
+         */
 function moveFile(tempFile, newPath) {
   // append the files filename and originalname to the path
   newPath += tempFile.filename + '-' + tempFile.originalname;
