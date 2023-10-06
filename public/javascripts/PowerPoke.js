@@ -218,7 +218,7 @@ class PowerPoke {
       if (nameID && type1 === '' && type2 === '' && gen === '') {
         const poke = await this.fetchByNameOrID(nameID);
         filteredPokes.push(poke);
-        console.log(filteredPokes);
+        // console.log(filteredPokes);
         return filteredPokes;
       } else if (gen) { // if gen is present in search, search by gen first
         // get the initial gen list
@@ -250,8 +250,8 @@ class PowerPoke {
       if (!gen) {
         // else if gen is NOT present
         const typeList = await this.fetchByType(type1, 1); // get initial list by type
-        console.log(typeList);
-        console.log(')(&)(*#&_(*#$');
+        // console.log(typeList);
+        // console.log(')(&)(*#&_(*#$');
         filteredPokes = await typeList;
         // TYPE 1 + TYPE 2
         if (type1 && type2) {
@@ -287,9 +287,8 @@ class PowerPoke {
       const nameRes = await fetch(`${API_ROOT}/pokemon/${searchNameID}/`);
       if (nameRes.ok) {
         const pokeData = await nameRes.json();
-        const x = await this.buildPokeObj(pokeData);
-        console.log(x);
-        return await x;
+
+        return await this.buildPokeObj(pokeData);
       }
     } catch (error) {
       console.error(error);
@@ -321,7 +320,6 @@ class PowerPoke {
               filteredGenPokes.push(this.buildPokeObj(genPokeData));
             }
           }
-          console.log(filteredGenPokes);
           // list of pokemon obj that meet the gen search criteria
           return filteredGenPokes;
         }

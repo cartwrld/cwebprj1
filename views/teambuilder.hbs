@@ -7,8 +7,9 @@
         <!--  card container  -->
         <div class="container d-flex flex-wrap justify-content-around align-items-center mt-3">
             {{#each pokeTeam}}
-                <div class="col-2">
-                    {{>pokecard}}</div>
+                <div class="col-11 col-sm-6 col-lg-4 col-xl-4 col-xxl-2">
+                    {{>pokecard}}
+                </div>
             {{/each}}
         </div>
         <!-- button container-->
@@ -151,18 +152,16 @@
                     </div>
 
                     <!-- apply filters button container -->
-                    <div id="pleasewait" class="container-fluid py-3 d-flex justify-content-center">
+                    <div class="container-fluid py-3 d-flex justify-content-center">
                         <button class="btn btn-success mx-3" type="submit" onclick="clickHandler()" id="applyBtn">Apply</button>
                         <script defer>
-                            function clickHandler(position, text) {
-                            //     document.getElementById('pleasewait').insertAdjacentHTML('beforeend', '<p>Please Wait...</p>');
+                            function clickHandler() {
                                 setTimeout(() => {
                                     let aplBtn = document.getElementById('applyBtn')
                                     aplBtn.disabled = true;
                                     aplBtn.innerText = 'Searching...';
                                     aplBtn.className = 'btn btn-primary'
                                 }, 1);
-                            //     // alert("Please allow a moment for the search to complete");
                             }
                         </script>
                     </div>
@@ -186,19 +185,13 @@
                                 <button class="btn btn-danger" name="addToTeam" type="submit" id="add{{pokeid}}ToTeam"
                                         value="{{pokeid}}">Add to Team
                                 </button>
-                                <!--                                <label class="form-check-label pt-1 px-3" for="add{{pokeid}}ToTeam">Add to Team</label>-->
                             </div>
                         </div>
                     </form>
                 {{/each}}
-                <!--                <div class="container">-->
-                <!--                    <a href="/teambuilder/more" methods="get"><button type="submit">Load More</button></a>-->
-                <!--                </div>-->
             {{/if}}
-
         </div>
     </div>
-
 </div>
 
 

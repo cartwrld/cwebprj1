@@ -77,9 +77,9 @@ async function whosThatPokemon(id) {
 router.get('/', async function(req, res, next) {
   const poke20List = await genFirst20PokeForTeamOptions();
   displayPokes = await pp.outputFilteredPokes(poke20List);
-  console.log('++++++++++++');
+  // console.log('++++++++++++');
   // console.log(displayPokes);
-  console.log('++++++++++++');
+  // console.log('++++++++++++');
   res.render('teambuilder', {
     sbmtNameID: req.query.searchNameID, // submitted searchNameID from post
     sbmtType1: req.query.searchType1, // submitted searchType1 from post
@@ -119,11 +119,11 @@ router.get('/', async function(req, res, next) {
 
 router.post('/team', async function(req, res, next) {
   pokeTeam = []; // Reset the pokeTeam array to be empty, it will be rebuilt later. It had to be done this way, don't ask me why
+
   if (pokeTeamIDs.length <= 5) { // Only add to a team if there are fewer than 6 Pokemon already in there
     pokeTeamIDs.push({
       id: req.body.addToTeam, // Getting the value of the button that was pressed, each button's value is equal to the associated Pokemon's ID
-    },
-    );
+    });
   }
 
   for (const pokeid of pokeTeamIDs) { // For each ID collected, we're going to make a pokemon
@@ -149,7 +149,7 @@ router.post('/clear', async function(req, res, next) {
 });
 
 router.post('/filters', async (req, res, next) => {
-  console.log(`name: ${req.body.searchNameID}\ntype1: ${req.body.searchType1}\ntype2: ${req.body.searchType2}\ngen:${req.body.searchGen}`);
+  // console.log(`name: ${req.body.searchNameID}\ntype1: ${req.body.searchType1}\ntype2: ${req.body.searchType2}\ngen:${req.body.searchGen}`);
 
   const filteredPokes = await pp.handleFiltersApply(
       req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);

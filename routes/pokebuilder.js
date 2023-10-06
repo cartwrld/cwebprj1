@@ -45,10 +45,6 @@ router.get('/',
       const violations = validationResult(req);
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
-
-      console.log(errorMessages);
-      console.log(req.files);
-
       res.render('pokebuilder', {
         pokebuilder: true,
 
@@ -115,9 +111,6 @@ router.post('/preview', upload.single('photo'),
       const violations = validationResult(req);
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
-      console.log(errorMessages);
-      console.log(req.file);
-
       let imageProps;
 
       if (req.file) {
@@ -131,17 +124,8 @@ router.post('/preview', upload.single('photo'),
           moveFile(req.file, 'D:\\GitHub\\cwebprj1\\public\\images\\');
         }
       }
-      for (const x of imageProps) {
-        console.log(x);
-      }
 
       const desctext = [{pokedesc: req.body.desc}];
-      console.log('desc post: ' + desctext);
-      console.log('imageprops post: ' + imageProps);
-
-      const multi = req.body.type2;
-
-      console.log(multi);
 
       res.render('pokebuilder', {
         pokebuilder: true,
@@ -175,13 +159,8 @@ function moveFile(tempFile, newPath) {
   fs.rename(tempFile.path, newPath, (err) => {
     // if there is a file system error just throw the error for now
     if (err) throw err;
-
-    // OPTIONAL: inspect new path in terminal
-    // console.log('File moved to ' + newPath);
   });
 }
 
 module.exports = router;
-// module.exports = (pp) => {
-//     return router;
-// };
+
