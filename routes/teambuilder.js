@@ -166,6 +166,7 @@ router.post('/filters', async (req, res, next) => {
     cards: displayPokes,
     empty: filteredPokes.length < 1,
     pokeTeam: pokeTeam, // In each post, the team has to be rendered again
+    filtersApplied: true,
   });
 });
 
