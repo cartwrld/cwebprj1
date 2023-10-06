@@ -2,7 +2,7 @@ const Pokemon = require('./Pokemon.js');
 const createHttpError = require('http-errors');
 
 
-let currentOffset = 20;
+const currentOffset = 20;
 const API_ROOT = 'https://pokeapi.co/api/v2';
 
 class PowerPoke {
@@ -71,7 +71,7 @@ class PowerPoke {
      * rather than doing one promise at a time, it greatly reduces loading times.
      * @return {Promise<Awaited<Pokemon>[]|*[]>} First 20 Pokemon
      */
-  async getFirst20PokeURLFromGenFetch() {
+  async getFirst20PokeObjFromGenFetch() {
     try {
       // stream to generate an array from 1-20, then use the sequencer to iterate through
       const first20Poke = Array.from({length: 20}, (_, i) => {
@@ -96,32 +96,32 @@ class PowerPoke {
     return [];
   }
 
-  async getNext20Pokes() {
-    const poke20List = [];
-    try {
-      // sequence generator from mdn
-      const offsetCalc = (start, stop, step) =>
-        Array.from({length: (stop - start) / step + 1}, (_, i) => start + i * step);
-
-      const offsetList = offsetCalc(currentOffset + 1, currentOffset + 20, 1);
-      console.log(offsetList);
-      const next20Poke = offsetList.map((i) => {
-        return fetch(`${API_ROOT}/pokemon/${i}`)
-            .then((next20Res) => {
-              if (next20Res.ok) {
-                return next20Res.json();
-              }
-              throw new Error(`Error fetching Pokemon with ID ${i}`);
-            })
-            .then((next20Data) => this.buildPokeObj(next20Data));
-      });
-      currentOffset += 20;
-      return await Promise.all(next20Poke);
-    } catch (error) {
-      console.error(error);
-    }
-    return poke20List;
-  }
+  // async getNext20Pokes() {
+  //   const poke20List = [];
+  //   try {
+  //     // sequence generator from mdn
+  //     const offsetCalc = (start, stop, step) =>
+  //       Array.from({length: (stop - start) / step + 1}, (_, i) => start + i * step);
+  //
+  //     const offsetList = offsetCalc(currentOffset + 1, currentOffset + 20, 1);
+  //     console.log(offsetList);
+  //     const next20Poke = offsetList.map((i) => {
+  //       return fetch(`${API_ROOT}/pokemon/${i}`)
+  //           .then((next20Res) => {
+  //             if (next20Res.ok) {
+  //               return next20Res.json();
+  //             }
+  //             throw new Error(`Error fetching Pokemon with ID ${i}`);
+  //           })
+  //           .then((next20Data) => this.buildPokeObj(next20Data));
+  //     });
+  //     currentOffset += 20;
+  //     return await Promise.all(next20Poke);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   return poke20List;
+  // }
 
   /**
      * Method that can be used for constructing a Pokemon object from the JSON data
@@ -180,7 +180,7 @@ class PowerPoke {
         fixedName += this.capitalizeFirstLetterOfType(str) + char;
       }
       // return the fixed name
-      return fixedName;
+      return fixedName.substring(0, fixedName.length -2);
     } else return nameVal; // no changes made
   }
 
@@ -199,29 +199,28 @@ class PowerPoke {
 
   async handleFiltersApply(nameID, type1, type2, gen) {
     // if no filters are selected, do nothing
-    if (!nameID, !type1, !type2, !gen) {
-      return [];
+    if (nameID === '' && type1 === '' && type2 === '' && gen === '') {
+      return await this.getFirst20PokeObjFromGenFetch();
     }
 
     // convert to lowercase for easy searching
     let filteredPokes;
-    nameID = nameID.toLowerCase();
-    type1 = type1.toLowerCase();
-    type2 = type2.toLowerCase();
-    gen = gen.toLowerCase();
+    nameID = nameID.toLowerCase().trim();
+    type1 = type1.toLowerCase().trim();
+    type2 = type2.toLowerCase().trim();
+    gen = gen.toLowerCase().trim();
 
     const filterHandler = async () => {
       // return array
       filteredPokes = [];
 
-      // if only name or ID is present in search, search directly with name
-      if (nameID && !gen && !type1 && !type2) {
+      // if only name or ID is present in search, disregard other filters and search directly with name
+      if (nameID && type1 === '' && type2 === '' && gen === '') {
         const poke = await this.fetchByNameOrID(nameID);
         filteredPokes.push(poke);
+        console.log(filteredPokes);
         return filteredPokes;
-      }
-      // if gen is present in search, search by gen first
-      if (gen) {
+      } else if (gen) { // if gen is present in search, search by gen first
         // get the initial gen list
         const genList = await this.fetchByGeneration(gen);
         filteredPokes = await genList;
@@ -252,11 +251,12 @@ class PowerPoke {
         // else if gen is NOT present
         const typeList = await this.fetchByType(type1, 1); // get initial list by type
         console.log(typeList);
+        console.log(')(&)(*#&_(*#$');
         filteredPokes = await typeList;
         // TYPE 1 + TYPE 2
         if (type1 && type2) {
           // filter out pokes that don't have a matching type 2
-          filteredPokes = typeList.filter((poke) => poke.type2 === type2);
+          filteredPokes = filteredPokes.filter((poke) => poke.type2 === type2);
           return filteredPokes;
         }
         // TYPE 1 ONLY
@@ -287,8 +287,9 @@ class PowerPoke {
       const nameRes = await fetch(`${API_ROOT}/pokemon/${searchNameID}/`);
       if (nameRes.ok) {
         const pokeData = await nameRes.json();
-
-        return this.buildPokeObj(pokeData);
+        const x = await this.buildPokeObj(pokeData);
+        console.log(x);
+        return await x;
       }
     } catch (error) {
       console.error(error);
