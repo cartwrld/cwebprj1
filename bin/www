@@ -82,4 +82,6 @@ function onListening() {
     console.log(`Ready to view @ http://localhost:${port}`);
     console.log(`Ready to view @ http://localhost:${port}/teambuilder/`);
     console.log(`Ready to view @ http://localhost:${port}/pokebuilder/`);
+    console.log(`Ready to view @ http://localhost:${port}/login/`);
+    console.log(`Ready to view @ http://localhost:${port}/recentactivity/`);
 }

@@ -10,6 +10,8 @@ const indexRouter = require('./routes/index');
 // const usersRouter = require('./routes/users');
 const pokeBuilderRouter = require('./routes/pokebuilder');
 const teamBuilderRouter = require('./routes/teambuilder');
+const loginRouter = require('./routes/login');
+const recentActivityRouter = require('./routes/recentactivity');
 
 const app = express();
 
@@ -33,6 +35,8 @@ app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 app.use('/teambuilder', teamBuilderRouter); // This is what determines the path name
 app.use('/pokebuilder', pokeBuilderRouter); // This is what determines the path name
+app.use('/login', loginRouter); // This is what determines the path name
+app.use('/recentactivity', recentActivityRouter); // This is what determines the path name
 
 app.use('/bw', express.static(__dirname + '/node_modules/bootswatch/dist'));
 
