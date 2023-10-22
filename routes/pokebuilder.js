@@ -15,31 +15,65 @@ const onlyMsgErrorFormatter = ({location, msg, param, value, nestedErrors}) => {
   return msg; // just return the string - this is not an object
 };
 
+
+/**
+ * Handles the GET requests for the '/pokebuilder/' endpoint.
+ * Validates the query parameters provided in the request such as Pokémon name, type, stats, and description.
+ *  * Renders the 'pokebuilder' page, displaying any validation errors, if present.
+ *
+ * @route GET /pokebuilder/
+ * @returns {void} Renders the 'pokebuilder' view with potential query values and any validation errors.
+ */
 router.get('/',
     [
-      query('name').if(query('name').exists())
+      query('name')
+          .if(query('name').exists())
           .trim().notEmpty().withMessage('PokeName is required').bail()
           .isLength({min: 2, max: 20}).withMessage('Name must have between 2 and 20 letters'),
-      // query('type1')
-      //     .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
-      //     .withMessage('Invalid PokeType')
-      //     .notEmpty().withMessage('You must choose at least 1 PokeType'),
-      query('hp').if(query('hp').exists()).trim().notEmpty().withMessage('HP Stat is required').bail()
-          .isNumeric().withMessage('Please enter a value between 1 and 999'),
-      query('atk').if(query('atk').exists()).trim().notEmpty().withMessage('ATK Stat is required').bail()
-          .isNumeric().withMessage('Please enter a value between 1 and 999'),
-      query('def').if(query('def').exists()).trim().notEmpty().withMessage('DEF Stat is required').bail()
-          .isNumeric().withMessage('Please enter a value between 1 and 999'),
-      query('spatk').if(query('spatk').exists()).trim().notEmpty().withMessage('SP. ATK Stat is required').bail()
-          .isNumeric().withMessage('Please enter a value between 1 and 999'),
-      query('spdef').if(query('spdef').exists()).trim().notEmpty().withMessage('SP. DEF Stat is required').bail()
-          .isNumeric().withMessage('Please enter a value between 1 and 999'),
-      query('spd').if(query('spd').exists()).trim().notEmpty().withMessage('SPD Stat is required').bail()
-          .isNumeric().withMessage('Please enter a value between 1 and 999'),
 
-      query('desc').if(query('desc').exists()).trim().notEmpty()
-          .withMessage('You must enter a description for your Pokemon').bail().isLength({min: 10, max: 500})
-          .withMessage('Please shorten the length of your description to 500 characters or less'),
+      query('type1')
+          .if(query('type1').exists()).trim()
+          .notEmpty().withMessage('You must choose at least 1 PokeType')
+          .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying',
+            'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
+          .withMessage('Invalid PokeType'),
+
+      query('hp')
+          .if(query('hp').exists()).trim()
+          .notEmpty().withMessage('HP Stat is required').bail()
+          .isNumeric().withMessage('Please enter a number between 1 and 999').bail()
+          .isInt({min: 1, max: 999}).withMessage('Please enter a number between 1 and 999'),
+      query('atk')
+          .if(query('atk').exists()).trim()
+          .notEmpty().withMessage('ATK Stat is required').bail()
+          .isNumeric().withMessage('Please enter a number between 1 and 999').bail()
+          .isInt({min: 1, max: 999}).withMessage('Please enter a number between 1 and 999'),
+      query('def')
+          .if(query('def').exists()).trim()
+          .notEmpty().withMessage('DEF Stat is required').bail()
+          .isNumeric().withMessage('Please enter a number between 1 and 999').bail()
+          .isInt({min: 1, max: 999}).withMessage('Please enter a number between 1 and 999'),
+      query('spatk')
+          .if(query('spatk').exists()).trim()
+          .notEmpty().withMessage('SP. ATK Stat is required').bail()
+          .isNumeric().withMessage('Please enter a number between 1 and 999').bail()
+          .isInt({min: 1, max: 999}).withMessage('Please enter a number between 1 and 999'),
+      query('spdef')
+          .if(query('spdef').exists()).trim()
+          .notEmpty().withMessage('SP. DEF Stat is required').bail()
+          .isNumeric().withMessage('Please enter a number between 1 and 999').bail()
+          .isInt({min: 1, max: 999}).withMessage('Please enter a number between 1 and 999'),
+      query('spd')
+          .if(query('spd').exists()).trim()
+          .notEmpty().withMessage('SPD Stat is required').bail()
+          .isNumeric().withMessage('Please enter a number between 1 and 999').bail()
+          .isInt({min: 1, max: 999}).withMessage('Please enter a number between 1 and 999'),
+
+      query('desc')
+          .if(query('desc').exists()).trim()
+          .notEmpty().withMessage('You must enter a description for your Pokemon').bail()
+          .isLength( {min: 5}).withMessage('Please increase the length of your description to 5 characters or more').bail()
+          .isLength( {max: 500}).withMessage('Please shorten the length of your description to 500 characters or less'),
     ],
     function(req, res, next) {
       const violations = validationResult(req);
@@ -57,19 +91,42 @@ router.get('/',
         sbmtSPATK: req.query.spatk,
         sbmtSPDEF: req.query.spdef,
         sbmtSPD: req.query.spd,
-        smbtPhoto: req.query.photo,
-        smbtDesc: req.query.desc,
+        sbmtPhoto: req.query.photo,
+        sbmtDesc: req.query.desc,
 
         err: errorMessages,
       });
     });
 
+
+/**
+ * Handles POST requests for the '/preview' endpoint.
+ * Validates the body parameters provided in the request such as Pokémon name, type, stats, photo, and description.
+ *
+ * If a file is uploaded as the photo:
+ *  - Validates the uploaded file's size and mime type.
+ *  - Moves the file to the appropriate directory.
+ *
+ * Renders the 'pokebuilder' page, displaying any validation errors and the uploaded Pokémon's details.
+ *
+ * @route POST /preview
+ * @throws {Error} Throws an error if Pokémon name is 'satan'.
+ * @throws {Error} Throws an error if no file is uploaded or the uploaded file violates the size/mime type constraints.
+ * @returns {void} Renders the 'pokebuilder' view with potential body values and any validation errors.
+ */
 router.post('/preview', upload.single('photo'),
     [
       body('name').trim().notEmpty().withMessage('PokeName is required').bail()
           .isLength({min: 2, max: 20}).withMessage('Name must have between 2 and 20 letters'),
+      body('name').custom((value, {req}) => {
+        if (req.body.name === 'satan') {
+          throw new Error('No Devil Worshiping!');
+        }
+        return true;
+      }),
       body('type1')
-          .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
+          .isIn(['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying',
+            'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'])
           .withMessage('Invalid PokeType')
           .notEmpty().withMessage('You must choose at least 1 PokeType'),
       body('hp').trim().notEmpty().withMessage('HP Stat is required!').bail()
@@ -92,8 +149,8 @@ router.post('/preview', upload.single('photo'),
         }
 
         // Check file size
-        if (req.file.size < 1024 || req.file.size > (2 * 1024 * 1024)) {
-          throw new Error('Uploaded file must be at least 1KB and at most 2MB');
+        if (req.file.size < 1024 || req.file.size > (25 * 1024 * 1024)) {
+          throw new Error('Uploaded file must be at least 1KB and at most 25MB');
         }
 
         // Check mimetype
@@ -121,7 +178,7 @@ router.post('/preview', upload.single('photo'),
             info: req.file.originalname,
             imgsrc: `/images/${req.file.filename}-${req.file.originalname}`,
           }];
-          moveFile(req.file, 'D:\\GitHub\\cwebprj1\\public\\images\\');
+          moveFile(req.file, __dirname + '/../public/images/');
         }
       }
 
@@ -140,19 +197,22 @@ router.post('/preview', upload.single('photo'),
         sbmtSPATK: req.body.spatk,
         sbmtSPDEF: req.body.spdef,
         sbmtSPD: req.body.spd,
-        smbtPhoto: imageProps,
+        sbmtPhoto: imageProps,
         sbmtDesc: desctext,
         multitype: req.body.type2 !== '',
-        submitted: true,
+
+        submitted: Object.keys(errorMessages).length <= 0,
         err: errorMessages,
       });
     });
 
 
 /**
-         * @param {MulterFileInfo} tempFile
-         * @param {string} newPath
-         */
+ * Moves a temporary uploaded file to a specified directory.
+ *
+ * @param {MulterFileInfo} tempFile - The Multer file object containing file details.
+ * @param {string} newPath - The directory to which the file should be moved.
+ */
 function moveFile(tempFile, newPath) {
   // append the files filename and originalname to the path
   newPath += tempFile.filename + '-' + tempFile.originalname;

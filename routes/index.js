@@ -5,6 +5,15 @@ const pp = new PowerPoke();
 
 let displayPokes;
 
+/**
+ * Generates a list of 8 random Pokémon to be displayed on the homepage.
+ *
+ * This function first retrieves base data about Pokémon from a random generation.
+ * Then, it creates an array of 8 random Pokémon from that generation to display
+ * on the homepage.
+ *
+ * @return {Promise<Array>} An array of 8 random Pokémon from a random generation.
+ */
 async function generate8RandomHomePagePokemon() {
   // get base data about Pokemon from a random gen
   const randGenData = await pp.getPokemonByGeneration(null);
@@ -20,34 +29,17 @@ async function generate8RandomHomePagePokemon() {
 }
 
 
-/* GET home page. */
+/**
+ * Handles GET requests for the '/' (root) endpoint.
+ * This function fetches 8 random Pokémon and prepares them for display,
+ * then renders them on the homepage.
+ *
+ * @route GET /
+ * @returns {void} Renders the 'index' view with 8 random Pokémon.
+ */
 router.get('/', async function(req, res, next) {
   const rand8Pokes = await generate8RandomHomePagePokemon();
   displayPokes = await pp.outputFilteredPokes(rand8Pokes);
-
-  // const outputInfo = async () => {
-  //   for (const [, poke] of Object.entries(rand8Pokes)) {
-  //     displayPokes.push({
-  //       pokename: pp.formatPokeName(poke.name),
-  //       pokeid: poke.id,
-  //       pokesprite: poke.sprite,
-  //       pokegen: poke.gen,
-  //       poketype1: pp.capitalizeFirstLetterOfType(poke.type1),
-  //       poketype2: pp.capitalizeFirstLetterOfType(poke?.type2),
-  //       pokestats: {
-  //         pokeHP: poke.hp,
-  //         pokeATK: poke.attack,
-  //         pokeDEF: poke.defense,
-  //         pokeSPATK: poke.specAtk,
-  //         pokeSPDEF: poke.specDef,
-  //         pokeSPD: poke.speed,
-  //       },
-  //       multitype: poke.type2 !== undefined,
-  //     });
-  //   }
-  // };
-
-  // await outputInfo();
 
   res.render('index', {
     cards: displayPokes,

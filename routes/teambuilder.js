@@ -1,15 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const PowerPoke = require('../public/javascripts/PowerPoke');
+
 const pp = new PowerPoke();
+
+const POKE_TYPES = ['', 'Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground',
+  'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'];
+const BANNED_CHARS = [[':', ';', '*', '/', '\\', '?', '"', '<', '>', '|', '&', '%', '$', '@', '`', '^', '[', ']', '{', '}', '(', ')', '_', '=', '+', '~']];
+
+const onlyMsgErrorFormatter = ({location, msg, param, value, nestedErrors}) => {
+  return msg; // just return the string - this is not an object
+};
+
+const {body, validationResult, query} = require('express-validator');
 
 let displayPokes;
 let pokeTeam = []; // Used to track the pokemon added to a team
 let pokeTeamIDs = []; // Used to track the ids of pokemon in a team
 
+
 /**
- * Returns the first 20 Pokemon, sorted by ID
- * @return {Promise<Awaited<Pokemon>[]|*[]>}
+ * Fetches and returns the first 20 Pokemon sorted by ID from the first generation.
+ *
+ * @return {Promise<Pokemon[]>} - A promise that resolves to an array of the first 20 Pokemon from the first generation.
  */
 async function genFirst20PokeForTeamOptions() {
   const genList = await pp.getPokemonByGeneration(1);
@@ -22,11 +35,12 @@ async function genFirst20PokeForTeamOptions() {
   return gen20PokesForTeamOptions();
 }
 
+
 /**
- * Returns a single Pokemon when passed in an ID value. The
- * Pokemon who's ID matches the passed in values will be the one returned
- * @param id
- * @return {Promise<Pokemon>}
+ * Fetches and returns a Pokemon based on the provided ID.
+ *
+ * @param {string} id - The ID of the Pokemon to fetch.
+ * @return {Promise<Pokemon>} - A promise that resolves to the Pokemon with the matching ID.
  */
 async function whosThatPokemon(id) {
   const ID = id;
@@ -40,98 +54,80 @@ async function whosThatPokemon(id) {
   return genNextPokemon();
 }
 
-// async function addNext20PokesToList() {
-//   const next20List = await pp.getNext20Pokes(displayPokes.length);
-//
-//   let next20;
-//   const gen20PokesForTeamOptions = async () => {
-//     next20 = await pp.getFirst20PokeObjFromGenFetch(next20List);
-//     return next20;
-//   };
-//   return gen20PokesForTeamOptions();
-// }
 
 /**
- * Outputs a json object that is formatted only to contain relevant
- * information to this project.
- * @param pokeList
- * @return {Promise<*[]>}
+ * Handles the GET requests for the '/teambuilder/' endpoint.
+ * The function fetches a list of Pokémon based on optional query parameters
+ * for type and generation and then renders them on the teambuilder page.
+ *
+ * @route GET /teambuilder/
+ * @returns {void} Renders the 'teambuilder' view with the list of filtered Pokémon.
  */
-// const outputFilteredPokes = async (pokeList) => {
-//   const pokeInfoList = [];
-//   for (const [, poke] of Object.entries(pokeList)) {
-//     pokeInfoList.push({
-//       pokename: pp.formatPokeName(poke.name),
-//       pokeid: poke.id,
-//       pokesprite: poke.sprite,
-//       poketype1: pp.capitalizeFirstLetterOfType(poke.type1),
-//       poketype2: pp.capitalizeFirstLetterOfType(poke?.type2),
-//       multitype: poke.type2 !== undefined,
-//     });
-//   }
-//   return pokeInfoList;
-// };
+router.get('/',
+    [
+      query('searchType1')
+          .if(query('searchType1').exists())
+          .isIn(POKE_TYPES)
+          .withMessage('Invalid PokeType - Nice try!'),
+      query('searchType2')
+          .if(query('searchType2').exists())
+          .isIn(POKE_TYPES)
+          .withMessage('Invalid PokeType - Nice try!'),
+      query('searchGen')
+          .if(query('searchGen').exists())
+          .isIn(['', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+          .withMessage('Invalid Generation - Nice try!'),
+    ],
+    async function(req, res, next) {
+      const violations = validationResult(req);
+      const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
 
-// http://localhost:3000/pokedex/
-/* GET home page. */
-router.get('/', async function(req, res, next) {
-  const poke20List = await genFirst20PokeForTeamOptions();
-  displayPokes = await pp.outputFilteredPokes(poke20List);
-  // console.log('++++++++++++');
-  // console.log(displayPokes);
-  // console.log('++++++++++++');
-  res.render('teambuilder', {
-    sbmtNameID: req.query.searchNameID, // submitted searchNameID from post
-    sbmtType1: req.query.searchType1, // submitted searchType1 from post
-    sbmtType2: req.query.searchType2, // submitted searchType2 from post
-    sbmtGen: req.query.searchGen, // submitted searchGen from post
-
-    teambuilder: true,
-    cards: displayPokes,
-
-    pokeTeam: pokeTeam,
-  });
-});
+      if (violations.isEmpty()) {
+        const poke20List = await genFirst20PokeForTeamOptions();
+        displayPokes = await pp.outputFilteredPokes(poke20List);
+      }
 
 
-// router.get('/more', async (req, res, next) => {
-//   const next20Pokes = await addNext20PokesToList();
-//
-//   const next20Info = await pp.outputFilteredPokes(next20Pokes);
-//   displayPokes += next20Info;
-//
-//
-//   console.log('=============');
-//   // console.log(next20Info);
-//   // console.log(next20Pokes);
-//   console.log(displayPokes);
-//   console.log('=============');
-//
-//   // for ((let prop in obj)
-//   // displayPokes.push(next20Info);
-//
-//   await res.render('teambuilder', {
-//     teambuilder: true,
-//     cards: displayPokes,
-//     pokeTeam: pokeTeam,
-//   });
-// });
+      res.render('teambuilder', {
+        sbmtNameID: req.query.searchNameID,
+        sbmtType1: req.query.searchType1,
+        sbmtType2: req.query.searchType2,
+        sbmtGen: req.query.searchGen,
 
+        teambuilder: true,
+        cards: displayPokes,
+        pokeTeam: pokeTeam,
+        err: errorMessages,
+      });
+    });
+
+
+/**
+ * Handles POST requests for the '/team' endpoint.
+ * This function manages the addition of Pokémon to the team based on the Pokémon's ID passed in the request body.
+ * It ensures that a team doesn't exceed 6 Pokémon and renders the updated team on the 'teambuilder' page.
+ *
+ * @route POST /teambuilder/team
+ * @returns {void} Renders the 'teambuilder' view with the updated Pokémon team.
+ */
 router.post('/team', async function(req, res, next) {
-  pokeTeam = []; // Reset the pokeTeam array to be empty, it will be rebuilt later. It had to be done this way, don't ask me why
-
-  if (pokeTeamIDs.length <= 5) { // Only add to a team if there are fewer than 6 Pokemon already in there
+  // Reset the pokeTeam array to be empty, it will be rebuilt later
+  pokeTeam = [];
+  // Only add to a team if there are fewer than 6 Pokemon already in there
+  if (pokeTeamIDs.length <= 5) {
     pokeTeamIDs.push({
-      id: req.body.addToTeam, // Getting the value of the button that was pressed, each button's value is equal to the associated Pokemon's ID
+      // Getting the value of the button that was pressed, each button's value is equal to the associated Pokemon's ID
+      id: req.body.addToTeam,
     });
   }
-
-  for (const pokeid of pokeTeamIDs) { // For each ID collected, we're going to make a pokemon
+  // For each ID collected, we're going to make a pokemon
+  for (const pokeid of pokeTeamIDs) {
     const newPokemon = await whosThatPokemon(parseInt(pokeid.id, 10));
     pokeTeam.push(newPokemon); // Then we add each pokemon to the team
   }
 
-  pokeTeam = await pp.outputFilteredPokes(pokeTeam); // Before we can render the Pokemon, they have to be formatted correctly first
+  // Before we can render the Pokemon, they have to be formatted correctly first
+  pokeTeam = await pp.outputFilteredPokes(pokeTeam);
 
   res.render('teambuilder', {
     cards: displayPokes,
@@ -139,6 +135,15 @@ router.post('/team', async function(req, res, next) {
   });
 });
 
+
+/**
+ * Handles POST requests for the '/clear' endpoint.
+ * This function resets the Pokémon team, clearing all previously added Pokémon,
+ * and then renders the empty team on the 'teambuilder' page.
+ *
+ * @route POST /teambuilder/clear
+ * @returns {void} Renders the 'teambuilder' view with an empty Pokémon team.
+ */
 router.post('/clear', async function(req, res, next) {
   pokeTeam = []; // Setting the pokeTeam to be null
   pokeTeamIDs = []; // And the ID array as well
@@ -148,27 +153,56 @@ router.post('/clear', async function(req, res, next) {
   });
 });
 
-router.post('/filters', async (req, res, next) => {
-  // console.log(`name: ${req.body.searchNameID}\ntype1: ${req.body.searchType1}\ntype2: ${req.body.searchType2}\ngen:${req.body.searchGen}`);
+/**
+ * Handles POST requests for the '/filters' endpoint.
+ * Validates the filters (Pokémon type and generation) provided in the request body
+ * and applies them to fetch and display a filtered list of Pokémon.
+ * Renders the 'teambuilder' page with the results, handling cases with validation errors
+ * or when no Pokémon match the filters.
+ *
+ * @returns {void} Renders the 'teambuilder' view with Pokémon filtered based on provided criteria.
+ */
+router.post('/filters',
+    [
+      body('searchType1')
+          .isIn(POKE_TYPES)
+          .withMessage('Invalid PokeType - Nice try!'),
+      body('searchType2')
+          .isIn(POKE_TYPES)
+          .withMessage('Invalid PokeType - Nice try!'),
+      body('searchGen')
+          .isIn(['', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+          .withMessage('Invalid Generation - Nice try!'),
+    ],
+    async (req, res, next) => {
+      // console.log(`name: ${req.body.searchNameID}\ntype1: ${req.body.searchType1}\ntype2: ${req.body.searchType2}\ngen:${req.body.searchGen}`);
+      const violations = validationResult(req);
+      const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
+      let filteredPokes = [];
+      console.log('POST - violations:');
+      console.log(violations);
 
-  const filteredPokes = await pp.handleFiltersApply(
-      req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);
-  displayPokes = await pp.outputFilteredPokes(filteredPokes);
+      if (violations.isEmpty()) {
+        filteredPokes = await pp.handleFiltersApply(
+            req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);
+        displayPokes = await pp.outputFilteredPokes(filteredPokes);
+      }
 
-  await res.render('teambuilder', {
-    sbmtNameID: req.body.searchNameID, // submitted searchNameID from post
-    sbmtType1: req.body.searchType1, // submitted searchType1 from post
-    sbmtType2: req.body.searchType2, // submitted searchType2 from post
-    sbmtGen: req.body.searchGen, // submitted searchGen from post
+      res.render('teambuilder', {
+        sbmtNameID: req.body.searchNameID,
+        sbmtType1: req.body.searchType1,
+        sbmtType2: req.body.searchType2,
+        sbmtGen: req.body.searchGen,
 
-    filtersSubmitted: true,
+        filtersSubmitted: true,
 
-    cards: displayPokes,
-    empty: filteredPokes.length < 1,
-    pokeTeam: pokeTeam, // In each post, the team has to be rendered again
-    filtersApplied: true,
-  });
-});
+        cards: displayPokes,
+        empty: filteredPokes.length < 1,
+        pokeTeam: pokeTeam, // In each post, the team has to be rendered again
+        filterSuccess: Object.keys(errorMessages).length <= 0,
+        err: errorMessages,
+      });
+    });
 
 module.exports = router;
 

@@ -19,6 +19,7 @@ app.set('view engine', 'hbs');
 
 // registering the views/partials folder to keep track of components (navbar, pokecard, etc)
 hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
+// registering a helper to use with the select > option element
 hbs.registerHelper('equals', (opt1, opt2) => opt1 === opt2);
 
 app.use(logger('dev'));
