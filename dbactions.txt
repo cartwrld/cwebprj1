@@ -1,0 +1,51 @@
+CREATE TABLE PokeTypes (
+    typeName TEXT
+        constraint table_name_pk
+            primary key
+);
+
+
+INSERT INTO poketypes (typeName) VALUES ('Normal');
+INSERT INTO poketypes (typeName) VALUES ('Fire');
+INSERT INTO poketypes (typeName) VALUES ('Water');
+INSERT INTO poketypes (typeName) VALUES ('Grass');
+INSERT INTO poketypes (typeName) VALUES ('Electric');
+INSERT INTO poketypes (typeName) VALUES ('Ice');
+INSERT INTO poketypes (typeName) VALUES ('Fighting');
+INSERT INTO poketypes (typeName) VALUES ('Poison');
+INSERT INTO poketypes (typeName) VALUES ('Ground');
+INSERT INTO poketypes (typeName) VALUES ('Flying');
+INSERT INTO poketypes (typeName) VALUES ('Psychic');
+INSERT INTO poketypes (typeName) VALUES ('Bug');
+INSERT INTO poketypes (typeName) VALUES ('Rock');
+INSERT INTO poketypes (typeName) VALUES ('Ghost');
+INSERT INTO poketypes (typeName) VALUES ('Dragon');
+INSERT INTO poketypes (typeName) VALUES ('Dark');
+INSERT INTO poketypes (typeName) VALUES ('Steel');
+INSERT INTO poketypes (typeName) VALUES ('Fairy');
+
+
+CREATE TABLE pokebuilder (
+    buildID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+        CONSTRAINT pokebuilder_name_cc CHECK ( name <= 20 )
+        CONSTRAINT pokebuilder_name_nn NOT NULL,
+    type1 TEXT references PokeTypes(typeName)
+        CONSTRAINT pokebuilder_type1_nn NOT NULL,
+    type2 TEXT,
+    hp INTEGER
+        CONSTRAINT pokebuilder_hp_cc CHECK ( hp > 0 & hp <= 999),
+    atk INTEGER
+        CONSTRAINT pokebuilder_atk_cc CHECK ( atk > 0 & atk <= 999),
+    def INTEGER
+        CONSTRAINT pokebuilder_def_cc CHECK ( def > 0 & def <= 999),
+    spatk INTEGER
+        CONSTRAINT pokebuilder_spatk_cc CHECK ( spatk > 0 & spatk <= 999),
+    spdef INTEGER
+        CONSTRAINT pokebuilder_spdef_cc CHECK ( spdef > 0 & spdef <= 999),
+    spd INTEGER
+        CONSTRAINT pokebuilder_spd_cc CHECK ( spd > 0 & spd <= 999),
+    photo TEXT,
+    description TEXT
+        CONSTRAINT pokebuilder_description_cc CHECK ( description < 500 )
+);

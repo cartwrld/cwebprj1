@@ -8,17 +8,18 @@ const hbs = require('hbs');
 const passport = require('passport');
 const session = require('express-session');
 
-const Sqlite = require('better-sqlite3');
-const SqliteStore = require('better-sqlite3-session-store')(session);
+const SQLite = require('better-sqlite3');
+const SQLiteStore = require('better-sqlite3-session-store')(session);
+
 const sessOptions = {
-  secret: 'shhh this is secret', // must be the same secret that cookieParser is using
+  secret: 'gotta catch em all', // must be the same secret that cookieParser is using
   name: 'session-id',
   resave: false,
   saveUninitialized: false,
   cookie: {httpOnly: false, maxAge: 1000 * 60 * 60},
   unset: 'destroy',
-  store: new SqliteStore({
-    client: new Sqlite('session.db', {verbose: console.log}),
+  store: new SQLiteStore({
+    client: new SQLite('poke.db', {verbose: console.log}),
     expired: {clear: true, intervals: 1000 * 60 * 15},
   }),
 };
@@ -48,6 +49,8 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
+app.use(session(sessOptions));
+app.use(passport.initialize({userProperty: 'currentUser'}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

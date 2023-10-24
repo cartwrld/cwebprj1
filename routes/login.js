@@ -20,7 +20,7 @@ passport.use(new JwtStrategy({
   algorithm: 'ES256',
 },
 (payload, done) => {
-  if (!['admin', 'employee', 'client'].includes(payload.role)) {
+  if (!['pokeuser'].includes(payload.role)) {
     return done(null, false, {message: 'Specified role is not allowed'});
   }
 
@@ -49,10 +49,13 @@ router.get('/', async function(req, res, next) {
 });
 
 router.post('/', (req, res, next) => {
+  if (req.body.teambuilder) {
+
+  }
   const payload = determineAccess(req);
   if (payload.scope) {
     const token = encodeJWT(payload);
-    res.redirect(`/secure/${payload.scope}/?access_token=${token}`);
+    res.redirect(`/home`);
   } else {
     res.render('secure-login', {
       title: 'POST LOGIN FORM',
@@ -90,13 +93,14 @@ const myHandler = (req, res, next) => {
     });
   }
 };
+
 router.get(['/dashboard', '/profile', '/booking'], myHandler);
 router.post(['/dashboard', '/profile', '/booking'], myHandler);
 
 // GET PASSPORT Handler for http://localhost:3000/secure/passport
 router.get('/passport', passport.authenticate('jwt', {
   session: false,
-  failureRedirect: '/secure/?err=jwt+not+verified',
+  failureRedirect: '/?err=jwt+not+verified',
 }),
 (req, res, next) => {
   // exclude clients from accessing this page
@@ -160,19 +164,11 @@ const checkJWT = (token, scope) => {
 // normally we would check a database but we don't have one so we are just hard coding
 const determineAccess = (req) => {
   const payload = {role: null, scope: null};
-  if (req.body.pwd === '123456Pw') {
-    switch (req.body.email.toLowerCase()) {
-      case 'admin@t.ca':
-        payload.role = 'admin';
+  if (req.body.password === 'p!K4ch0o') {
+    switch (req.body.username.toLowerCase()) {
+      case 'AshKetchum':
+        payload.role = 'pokeuser';
         payload.scope = 'dashboard';
-        break;
-      case 'work@t.ca':
-        payload.role = 'employee';
-        payload.scope = 'profile';
-        break;
-      case 'client@t.ca':
-        payload.role = 'client';
-        payload.scope = 'booking';
         break;
       default:
       // do nothing
