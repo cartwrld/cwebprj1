@@ -1,4 +1,3 @@
-
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -6,8 +5,27 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const hbs = require('hbs');
 
+const passport = require('passport');
+const session = require('express-session');
+
+const Sqlite = require('better-sqlite3');
+const SqliteStore = require('better-sqlite3-session-store')(session);
+const sessOptions = {
+  secret: 'shhh this is secret', // must be the same secret that cookieParser is using
+  name: 'session-id',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {httpOnly: false, maxAge: 1000 * 60 * 60},
+  unset: 'destroy',
+  store: new SqliteStore({
+    client: new Sqlite('session.db', {verbose: console.log}),
+    expired: {clear: true, intervals: 1000 * 60 * 15},
+  }),
+};
+
+
 const indexRouter = require('./routes/index');
-// const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/users');
 const pokeBuilderRouter = require('./routes/pokebuilder');
 const teamBuilderRouter = require('./routes/teambuilder');
 const loginRouter = require('./routes/login');
@@ -32,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
 
 app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.use('/users', usersRouter);
 app.use('/teambuilder', teamBuilderRouter); // This is what determines the path name
 app.use('/pokebuilder', pokeBuilderRouter); // This is what determines the path name
 app.use('/login', loginRouter); // This is what determines the path name
