@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-danger navbar-dark sticky-top shadow">
     <div class="container-fluid">
         <div class="container-fluid text-center d-flex flex-row flex wrap  align-items-center">
-            <a class="navbar-brand" href="/recentactivity/">
+            <a class="navbar-brand">
                 <img src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" alt="Poke Ball" width="50px"
                      height="50px">
             </a>
@@ -9,38 +9,46 @@
                 <div class="navbar-text text-center text-white h2 h6-xl pt-3">PowerPoke</div>
             </div>
             <button class="navbar-toggler mt-xl-3" type="button" data-bs-toggle="collapse"
-                    data-bs-target=".collapsibleNavbar">
+                    data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+        </div>
+        <div class="container-fluid collapse navbar-collapse mx-0 px-0 "
+             id="collapsibleNavbar">
+            <div class="navbar-nav container ">
+                <div class="bg-danger bg-gradient d-flex flex-column flex-lg-row rounded-2">
 
-            <div class="container-fluid collapse navbar-collapse collapsibleNavbar">
-                <ul class="navbar-nav container">
-                    <li class="nav-item">
+                    <p class="nav-item m-0">
                         <a class="nav-link {{#if homepage}}active{{/if}}" href="/">Home
                             <span class="visually-hidden">(current)</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
+                    </p>
+                    <p class="nav-item m-0">
                         <a class="nav-link {{#if pokebuilder}}active{{/if}}" href="/pokebuilder/">PokeBuilder
                             <span class="visually-hidden">(current)</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
+                    </p>
+                    <p class="nav-item m-0">
                         <a class="nav-link {{#if teambuilder}}active{{/if}}" href="/teambuilder/">Team Builder
                             <span class="visually-hidden">(current)</span>
                         </a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <ul class="d-flex navbar-nav container collapsibleNavbar">
-                        <li class="nav-item">
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="d-flex navbar-nav container">
+                    <div class="bg-danger bg-gradient d-flex flex-column flex-lg-row rounded-2">
+                        <p class="nav-item m-0">
                             <a class="nav-link {{#if login}}active{{/if}}" href="/login">Account
                                 <span class="visually-hidden">(current)</span>
                             </a>
-                        </li>
-                    </ul>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </nav>
+
+
