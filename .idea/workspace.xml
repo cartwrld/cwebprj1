@@ -40,7 +40,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/GitHub/CWEB280-Files",
+    "last_opened_file_path": "D:/GitHub/cwebprj1/routes",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -59,9 +59,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\GitHub\cwebprj1" />
       <recent name="D:\GitHub\cwebprj1\routes" />
       <recent name="D:\GitHub\cwebprj1\views" />
+      <recent name="D:\GitHub\cwebprj1" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">

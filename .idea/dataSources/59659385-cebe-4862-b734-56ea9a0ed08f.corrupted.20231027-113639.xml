@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dataSource name="pokemon.db">
+<dataSource name="poke">
   <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.49">
     <root id="1">
       <ServerVersion>3.43.0</ServerVersion>
@@ -446,8 +446,8 @@
     </routine>
     <schema id="177" parent="1" name="main">
       <Current>1</Current>
-      <IntrospectionTimestamp>2023-10-24.16:40:34.548</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2023-10-24.22:40:34</LocalIntrospectionTimestamp>
+      <IntrospectionTimestamp>2023-10-24.17:29:26.981</IntrospectionTimestamp>
+      <LocalIntrospectionTimestamp>2023-10-24.23:29:26</LocalIntrospectionTimestamp>
     </schema>
     <argument id="178" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1469,59 +1469,162 @@
     <argument id="517" parent="176">
       <Position>1</Position>
     </argument>
-    <table id="518" parent="177" name="pokeusers"/>
-    <table id="519" parent="177" name="sqlite_master">
+    <table id="518" parent="177" name="PokeTypes"/>
+    <table id="519" parent="177" name="pokebuilder"/>
+    <table id="520" parent="177" name="sessions"/>
+    <table id="521" parent="177" name="sqlite_master">
       <System>1</System>
     </table>
-    <check id="520" parent="518" name="pokeusers_email_cc">
-      <Predicate>email LIKE &apos;%@%.%&apos;</Predicate>
-    </check>
-    <check id="521" parent="518" name="pokeusers_pwd_cc">
-      <Predicate>pwd &gt;= 8</Predicate>
-    </check>
-    <check id="522" parent="518" name="pokeusers_username_cc">
-      <Predicate>username &gt; 12</Predicate>
-    </check>
-    <column id="523" parent="518" name="userID">
+    <table id="522" parent="177" name="sqlite_sequence">
+      <System>1</System>
+    </table>
+    <column id="523" parent="518" name="typeID">
+      <AutoIncrement>1</AutoIncrement>
       <DasType>INTEGER|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="524" parent="518" name="username">
+    <column id="524" parent="518" name="typeName">
+      <DasType>TEXT|0s</DasType>
+      <Position>2</Position>
+    </column>
+    <key id="525" parent="518" name="PokeTypes_pk">
+      <ColNames>typeID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <check id="526" parent="519" name="pokebuilder_atk_cc">
+      <Predicate>atk &gt; 0 &amp; atk &lt;= 999</Predicate>
+    </check>
+    <check id="527" parent="519" name="pokebuilder_def_cc">
+      <Predicate>def &gt; 0 &amp; def &lt;= 999</Predicate>
+    </check>
+    <check id="528" parent="519" name="pokebuilder_description_cc">
+      <Predicate>description &lt; 500</Predicate>
+    </check>
+    <check id="529" parent="519" name="pokebuilder_hp_cc">
+      <Predicate>hp &gt; 0 &amp; hp &lt;= 999</Predicate>
+    </check>
+    <check id="530" parent="519" name="pokebuilder_name_cc">
+      <Predicate>name &lt;= 20</Predicate>
+    </check>
+    <check id="531" parent="519" name="pokebuilder_spatk_cc">
+      <Predicate>spatk &gt; 0 &amp; spatk &lt;= 999</Predicate>
+    </check>
+    <check id="532" parent="519" name="pokebuilder_spd_cc">
+      <Predicate>spd &gt; 0 &amp; spd &lt;= 999</Predicate>
+    </check>
+    <check id="533" parent="519" name="pokebuilder_spdef_cc">
+      <Predicate>spdef &gt; 0 &amp; spdef &lt;= 999</Predicate>
+    </check>
+    <column id="534" parent="519" name="buildID">
+      <AutoIncrement>1</AutoIncrement>
+      <DasType>INTEGER|0s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="535" parent="519" name="name">
       <DasType>TEXT|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="525" parent="518" name="email">
+    <column id="536" parent="519" name="type1">
       <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="526" parent="518" name="pwd">
+    <column id="537" parent="519" name="type2">
       <DasType>TEXT|0s</DasType>
       <Position>4</Position>
     </column>
-    <key id="527" parent="518">
-      <ColNames>userID</ColNames>
+    <column id="538" parent="519" name="hp">
+      <DasType>INTEGER|0s</DasType>
+      <Position>5</Position>
+    </column>
+    <column id="539" parent="519" name="atk">
+      <DasType>INTEGER|0s</DasType>
+      <Position>6</Position>
+    </column>
+    <column id="540" parent="519" name="def">
+      <DasType>INTEGER|0s</DasType>
+      <Position>7</Position>
+    </column>
+    <column id="541" parent="519" name="spatk">
+      <DasType>INTEGER|0s</DasType>
+      <Position>8</Position>
+    </column>
+    <column id="542" parent="519" name="spdef">
+      <DasType>INTEGER|0s</DasType>
+      <Position>9</Position>
+    </column>
+    <column id="543" parent="519" name="spd">
+      <DasType>INTEGER|0s</DasType>
+      <Position>10</Position>
+    </column>
+    <column id="544" parent="519" name="photo">
+      <DasType>TEXT|0s</DasType>
+      <Position>11</Position>
+    </column>
+    <column id="545" parent="519" name="description">
+      <DasType>TEXT|0s</DasType>
+      <Position>12</Position>
+    </column>
+    <foreign-key id="546" parent="519">
+      <ColNames>type1</ColNames>
+      <RefColNames>typeName</RefColNames>
+      <RefTableName>PokeTypes</RefTableName>
+    </foreign-key>
+    <key id="547" parent="519">
+      <ColNames>buildID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="528" parent="519" name="type">
+    <column id="548" parent="520" name="sid">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="549" parent="520" name="sess">
+      <DasType>JSON|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="550" parent="520" name="expire">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <index id="551" parent="520" name="sqlite_autoindex_sessions_1">
+      <ColNames>sid</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <Unique>1</Unique>
+    </index>
+    <key id="552" parent="520">
+      <ColNames>sid</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_sessions_1</UnderlyingIndexName>
+    </key>
+    <column id="553" parent="521" name="type">
       <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="529" parent="519" name="name">
+    <column id="554" parent="521" name="name">
       <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="530" parent="519" name="tbl_name">
+    <column id="555" parent="521" name="tbl_name">
       <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="531" parent="519" name="rootpage">
+    <column id="556" parent="521" name="rootpage">
       <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="532" parent="519" name="sql">
+    <column id="557" parent="521" name="sql">
       <DasType>TEXT|0s</DasType>
       <Position>5</Position>
+    </column>
+    <column id="558" parent="522" name="name">
+      <Position>1</Position>
+    </column>
+    <column id="559" parent="522" name="seq">
+      <Position>2</Position>
     </column>
   </database-model>
 </dataSource>

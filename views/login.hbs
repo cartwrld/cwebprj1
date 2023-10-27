@@ -14,17 +14,29 @@
                         <label for="password" class="fw-bold pb-2">Password:</label>
                         <input class="form-control col-2" type="password" id="password" name="password">
                     </div>
+                    <!--                    <div class="container d-flex justify-content-center align-items-center">-->
+                    <!--                        <div class="g-signin2 bg-success rounded-3" data-onsuccess="onSignIn"></div>-->
+                    <!--                    </div-->
                     {{#each payload}}
                         <p class="col-md-8 fs-4">{{@key}}: {{this}}</p>
                     {{/each}}
                     <!--   Only show button if action is specified-->
-                    {{#if action}}
-                        <form action="{{action}}" method="post">
-                            <!--        pass the JWT as a value in a hidden input-->
-                            <input type="hidden" name="access_token" value="{{token}}"/>
-                            <button type="submit" class="btn btn-success mt-0">Login</button>
-                        </form>
-                    {{/if}}
+
+                    <form action="{{action}}" method="post">
+                        <button type="submit" class="btn btn-success mt-0">
+                            <div class="g-signin2 rounded-3" data-onsuccess="onSignIn"></div>
+                        </button>
+                    </form>
+
+                    <script>
+                        function onSignIn(googleUser) {
+                            var profile = googleUser.getBasicProfile();
+                            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                            console.log('Name: ' + profile.getName());
+                            console.log('Image URL: ' + profile.getImageUrl());
+                            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+                        }
+                    </script>
 
                 </form>
             </div>

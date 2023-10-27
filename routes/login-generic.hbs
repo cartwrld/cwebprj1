@@ -1,0 +1,17 @@
+<div class="container">
+    <div>
+        <h1>{{title}}</h1>
+
+        {{#each payload}}
+            <p class="col-md-8 fs-4">{{@key}} : {{this}}</p>
+        {{/each}}
+    </div>
+    <!-- if action is provided in the options then show the form -->
+    {{#if action}}
+        <form action="{{action}}" method="post">
+            <input type="hidden" name="access_token" value="{{token}}">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    {{/if}}
+
+</div>
