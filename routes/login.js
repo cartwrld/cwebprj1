@@ -3,24 +3,6 @@ const router = express.Router();
 const PowerPoke = require('../public/javascripts/PowerPoke.js');
 const pp = new PowerPoke();
 
-const fs = require('fs');
-
-const jwt = require('jsonwebtoken');
-
-const passport = require('passport');
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-
-// passport.use(new JwtStrategy({
-//   jwtFromRequest: ExtractJwt.fromExtractors([
-//     ExtractJwt.fromUrlQueryParameter('access_token'),
-//     ExtractJwt.fromBodyField('access_token'),
-//   ]),
-//   secretOrKey: fs.readFileSync('es256public.pem'),
-//   algorithm: 'ES256',
-// },
-
-
 /**
  * Handles GET requests for the '/' (root) endpoint.
  * This function fetches 8 random Pokémon and prepares them for display,
@@ -39,24 +21,6 @@ router.get('/', async function(req, res, next) {
   });
 });
 
-router.post('/', (req, res, next) => {
-  if (req.body.teambuilder) {
-
-  }
-  const payload = determineAccess(req);
-  if (payload.scope) {
-    const token = encodeJWT(payload);
-    res.redirect(`/home`);
-  } else {
-    res.render('secure-login', {
-      title: 'POST LOGIN FORM',
-      isSubmitted: true,
-      err: {email: 'Email is not recognized', pwd: 'Password is not recognized'},
-      submittedEmail: req.body.email, // actual posted value
-      submittedPassword: req.body.pwd, // actual posted value
-    });
-  }
-});
 
 const myHandler = (req, res, next) => {
   const scope = req.path.replace(/^\/+|\/+$/g, '');
@@ -76,7 +40,7 @@ const myHandler = (req, res, next) => {
   if (decodedPayload.redirect) {
     res.redirect(decodedPayload.redirect);
   } else {
-    res.render('secure-generic', {
+    res.render('login-generic', {
       title,
       payload: decodedPayload,
       token,
