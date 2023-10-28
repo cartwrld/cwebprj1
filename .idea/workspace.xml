@@ -5,55 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="684bd24c-9d3a-4aba-b62d-b4004c01d335" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/59659385-cebe-4862-b734-56ea9a0ed08f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/59659385-cebe-4862-b734-56ea9a0ed08f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.mjs.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/index.mjs.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@eslint-community/regexpp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.d.mts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.d.mts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.iobj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.iobj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.ipdb" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.ipdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.node" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.node" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/better_sqlite3.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/better_sqlite3/src/better_sqlite3.obj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/better_sqlite3/src/better_sqlite3.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/better_sqlite3/win_delay_load_hook.obj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/better_sqlite3/win_delay_load_hook.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/test_extension/deps/test_extension.obj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/test_extension/deps/test_extension.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/test_extension/win_delay_load_hook.obj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/obj/test_extension/win_delay_load_hook.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/sqlite3.lib" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/sqlite3.lib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.iobj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.iobj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.ipdb" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.ipdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.node" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.node" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/Release/test_extension.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/binding.sln" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/binding.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/deps/Release/obj/sqlite3/obj/global_intermediate/sqlite3/sqlite3.obj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/deps/Release/obj/sqlite3/obj/global_intermediate/sqlite3/sqlite3.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/deps/Release/obj/sqlite3/win_delay_load_hook.obj" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/deps/Release/obj/sqlite3/win_delay_load_hook.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/better-sqlite3/build/deps/sqlite3.sln" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/better-sqlite3/build/deps/sqlite3.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/body-parser/HISTORY.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/body-parser/HISTORY.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/body-parser/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/body-parser/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/body-parser/lib/types/json.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/body-parser/lib/types/json.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/body-parser/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/body-parser/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/eslint/bin/eslint.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/eslint/bin/eslint.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/raw-body/HISTORY.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/raw-body/HISTORY.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/raw-body/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/raw-body/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/raw-body/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/raw-body/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/raw-body/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/raw-body/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/login.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/login.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.hbs" afterDir="false" />
     </list>
@@ -89,7 +42,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "google__sign__in",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/GitHub/cwebprj1/routes",
+    "last_opened_file_path": "D:/GitHub/cwebprj1/public/assets",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -108,6 +61,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\GitHub\cwebprj1\public\assets" />
       <recent name="D:\GitHub\cwebprj1\routes" />
       <recent name="D:\GitHub\cwebprj1\views" />
       <recent name="D:\GitHub\cwebprj1" />
@@ -149,7 +103,7 @@
       <workItem from="1698162753927" duration="5545000" />
       <workItem from="1698168381060" duration="580000" />
       <workItem from="1698185542735" duration="7814000" />
-      <workItem from="1698516758010" duration="787000" />
+      <workItem from="1698516758010" duration="6715000" />
     </task>
     <servers />
   </component>

@@ -11,24 +11,14 @@ const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
-passport.use(new JwtStrategy({
-  jwtFromRequest: ExtractJwt.fromExtractors([
-    ExtractJwt.fromUrlQueryParameter('access_token'),
-    ExtractJwt.fromBodyField('access_token'),
-  ]),
-  secretOrKey: fs.readFileSync('es256public.pem'),
-  algorithm: 'ES256',
-},
-(payload, done) => {
-  if (!['pokeuser'].includes(payload.role)) {
-    return done(null, false, {message: 'Specified role is not allowed'});
-  }
-
-  if (!['dashboard', 'profile', 'booking'].includes(payload.scope)) {
-    return done(null, false, {message: 'Specified scope is not allowed'});
-  }
-  return done(null, payload);
-}));
+// passport.use(new JwtStrategy({
+//   jwtFromRequest: ExtractJwt.fromExtractors([
+//     ExtractJwt.fromUrlQueryParameter('access_token'),
+//     ExtractJwt.fromBodyField('access_token'),
+//   ]),
+//   secretOrKey: fs.readFileSync('es256public.pem'),
+//   algorithm: 'ES256',
+// },
 
 
 /**
@@ -172,7 +162,7 @@ const determineAccess = (req) => {
         payload.scope = 'dashboard';
         break;
       default:
-            // do nothing
+      // do nothing
     }
   }
   return payload;
