@@ -17,6 +17,7 @@ const {body, validationResult, query} = require('express-validator');
 let displayPokes;
 let pokeTeam = []; // Used to track the pokemon added to a team
 let pokeTeamIDs = []; // Used to track the ids of pokemon in a team
+let sessActions = [];
 
 
 /**
@@ -129,6 +130,12 @@ router.post('/team', async function(req, res, next) {
   // Before we can render the Pokemon, they have to be formatted correctly first
   pokeTeam = await pp.outputFilteredPokes(pokeTeam);
 
+  sessActions = req.session.Actions;
+  const JSONAction = createSessionAction('User added a pokemon to their team', 'Team Builder');
+  sessActions.unshift(JSONAction);
+  sessActions = sessActions.slice(0, 4);
+  req.session.Actions = sessActions;
+
   res.render('teambuilder', {
     cards: displayPokes,
     pokeTeam: pokeTeam,
@@ -147,6 +154,15 @@ router.post('/team', async function(req, res, next) {
 router.post('/clear', async function(req, res, next) {
   pokeTeam = []; // Setting the pokeTeam to be null
   pokeTeamIDs = []; // And the ID array as well
+
+  sessActions = req.session.Actions;
+  const JSONAction = createSessionAction('User cleared their team', 'Team Builder');
+  sessActions.unshift(JSONAction);
+  sessActions = sessActions.slice(0, 4);
+  req.session.Actions = sessActions;
+
+  console.log(req.session.Actions);
+
   res.render('teambuilder', {
     cards: displayPokes,
     pokeTeam: pokeTeam,
@@ -179,6 +195,7 @@ router.post('/filters',
       const violations = validationResult(req);
       const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
       let filteredPokes = [];
+
       console.log('POST - violations:');
       console.log(violations);
 
@@ -187,6 +204,14 @@ router.post('/filters',
             req.body.searchNameID, req.body.searchType1, req.body.searchType2, req.body.searchGen);
         displayPokes = await pp.outputFilteredPokes(filteredPokes);
       }
+
+      sessActions = req.session.Actions;
+      const JSONAction = createSessionAction('User searched for Pokemon', 'Team Builder');
+      sessActions.unshift(JSONAction);
+      sessActions = sessActions.slice(0, 4);
+      req.session.Actions = sessActions;
+
+      console.log(req.session.Actions);
 
       res.render('teambuilder', {
         sbmtNameID: req.body.searchNameID,
@@ -203,6 +228,31 @@ router.post('/filters',
         err: errorMessages,
       });
     });
+
+function createSessionAction(sessionAction, page) {
+  const currentDateTime = new Date();
+
+  const hours = currentDateTime.getHours() % 12;
+  const minutes = currentDateTime.getMinutes();
+  const seconds = currentDateTime.getSeconds();
+  const amPM = currentDateTime.getHours() < 12 ? 'AM' : 'PM';
+
+  const year = currentDateTime.getFullYear();
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const month = monthNames[currentDateTime.getMonth()];
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayOfWeek = dayNames[currentDateTime.getDay()];
+  const day = currentDateTime.getDate();
+
+  JSONAction = {
+    action: sessionAction,
+    page: page,
+    time: hours + ':' + minutes + ':' + seconds + ' ' + amPM,
+    date: dayOfWeek + ', ' + month + ', ' + day + ', ' + year,
+  };
+
+  return JSONAction;
+}
 
 module.exports = router;
 

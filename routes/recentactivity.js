@@ -3,7 +3,6 @@ const router = express.Router();
 const PowerPoke = require('../public/javascripts/PowerPoke.js');
 const pp = new PowerPoke();
 
-
 /**
  * Handles GET requests for the '/' (root) endpoint.
  * This function fetches 8 random Pokémon and prepares them for display,
@@ -14,7 +13,7 @@ const pp = new PowerPoke();
  */
 router.get('/', async function(req, res, next) {
   res.render('recentactivity', {
-
+    sessActions: req.session.Actions,
   });
 });
 

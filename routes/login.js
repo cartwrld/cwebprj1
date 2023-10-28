@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const PowerPoke = require('../public/javascripts/PowerPoke.js');
 const pp = new PowerPoke();
+const passport = require('passport');
 
 /**
  * Handles GET requests for the '/' (root) endpoint.

@@ -5,46 +5,18 @@
         <div class="container-fluid mb-1 d-flex flex-column justify-content-around align-content-center mb-1 bg-body-secondary
     rounded mb-0 px-xxl-5">
             <div class="pt-4 d-flex flex-column justify-content-center px-xxl-5">
+                {{#each sessActions}}
                 <div class="mb-4 d-flex flex-wrap justify-content-center align-items-center p-4 bg-light bg-gradient rounded-5">
                     <div class="d-flex align-items-center p-3 rounded-5 border border-2 border-danger bg-danger bg-gradient">
                         <div class="p-3 px-4 rounded-circle bg-light bg-gradient bg-opacity-10 border border-2 border-danger">
-                            <span class="my-5 fw-bold text-light fs-5">1</span>
+                            <span class="my-5 fw-bold text-light fs-5">{{@index}}</span>
                         </div>
                     </div>
                     <div class="mx-5">
-                        <p class="m-0 fw-bold" id="recActItem1">Recent Activity Item</p>
+                        <p class="m-0 fw-bold" id="recActItem1">{{action}} on {{page}} at {{time}} on {{date}}</p>
                     </div>
                 </div>
-                <div class="mb-4 d-flex flex-wrap justify-content-center align-items-center p-4 bg-light bg-gradient rounded-5">
-                    <div class="d-flex align-items-center p-3 rounded-5 border border-2 border-danger bg-danger bg-gradient">
-                        <div class="p-3 px-4 rounded-circle bg-light bg-gradient bg-opacity-10 border border-2 border-danger">
-                            <span class="my-5 fw-bold text-light fs-5">2</span>
-                        </div>
-                    </div>
-                    <div class="mx-5">
-                        <p class="m-0 fw-bold" id="recActItem2">Recent Activity Item</p>
-                    </div>
-                </div>
-                <div class="mb-4 d-flex flex-wrap justify-content-center align-items-center p-4 bg-light bg-gradient rounded-5">
-                    <div class="d-flex align-items-center p-3 rounded-5 border border-2 border-danger bg-danger bg-gradient">
-                        <div class="p-3 px-4 rounded-circle bg-light bg-gradient bg-opacity-10 border border-2 border-danger">
-                            <span class="my-5 fw-bold text-light fs-5">3</span>
-                        </div>
-                    </div>
-                    <div class="mx-5">
-                        <p class="m-0 fw-bold" id="recActItem3">Recent Activity Item</p>
-                    </div>
-                </div>
-                <div class="mb-4 d-flex flex-wrap justify-content-center align-items-center p-4 bg-light bg-gradient rounded-5">
-                    <div class="d-flex align-items-center p-3 rounded-5 border border-2 border-danger bg-danger bg-gradient">
-                        <div class="p-3 px-4 rounded-circle bg-light bg-gradient bg-opacity-10 border border-2 border-danger">
-                            <span class="my-5 fw-bold text-light fs-5">4</span>
-                        </div>
-                    </div>
-                    <div class="mx-5">
-                        <p class="m-0 fw-bold" id="recActItem4">Recent Activity Item</p>
-                    </div>
-                </div>
+                {{/each}}
             </div>
         </div>
     </div>
