@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="684bd24c-9d3a-4aba-b62d-b4004c01d335" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/navbar.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/navbar.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/recentactivity.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/recentactivity.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/login.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +37,9 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/GitHub/cwebprj1/routes",
+    "git-widget-placeholder": "google__sign__in",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/GitHub/cwebprj1/public/assets",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -59,6 +58,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\GitHub\cwebprj1\public\assets" />
       <recent name="D:\GitHub\cwebprj1\routes" />
       <recent name="D:\GitHub\cwebprj1\views" />
       <recent name="D:\GitHub\cwebprj1" />
@@ -100,6 +100,7 @@
       <workItem from="1698162753927" duration="5545000" />
       <workItem from="1698168381060" duration="580000" />
       <workItem from="1698185542735" duration="7814000" />
+      <workItem from="1698516758010" duration="7036000" />
     </task>
     <servers />
   </component>
