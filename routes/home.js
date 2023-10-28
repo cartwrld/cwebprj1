@@ -15,17 +15,17 @@ let displayPokes;
  * @return {Promise<Array>} An array of 8 random Pokémon from a random generation.
  */
 async function generate8RandomHomePagePokemon() {
-    // get base data about Pokemon from a random gen
-    const randGenData = await pp.getPokemonByGeneration(null);
-    let randPokeList;
+  // get base data about Pokemon from a random gen
+  const randGenData = await pp.getPokemonByGeneration(null);
+  let randPokeList;
 
-    const randomHomePokes = async () => {
-        // create an array of 8 random Pokemon to display on the homepage
-        randPokeList = await pp.get8RandomPokeURLFromInitialFetch(randGenData);
-        return randPokeList;
-    };
+  const randomHomePokes = async () => {
+    // create an array of 8 random Pokemon to display on the homepage
+    randPokeList = await pp.get8RandomPokeURLFromInitialFetch(randGenData);
+    return randPokeList;
+  };
 
-    return randomHomePokes();
+  return randomHomePokes();
 }
 
 
@@ -37,14 +37,14 @@ async function generate8RandomHomePagePokemon() {
  * @route GET /
  * @returns {void} Renders the 'homepage' view with 8 random Pokémon.
  */
-router.get('/', async function (req, res, next) {
-    const rand8Pokes = await generate8RandomHomePagePokemon();
-    displayPokes = await pp.outputFilteredPokes(rand8Pokes);
+router.get('/', async function(req, res, next) {
+  const rand8Pokes = await generate8RandomHomePagePokemon();
+  displayPokes = await pp.outputFilteredPokes(rand8Pokes);
 
-    res.render('home', {
-        cards: displayPokes,
-        homepage: true,
-    });
+  res.render('home', {
+    cards: displayPokes,
+    homepage: true,
+  });
 });
 
 module.exports = router;
