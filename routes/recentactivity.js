@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const PowerPoke = require('../public/javascripts/PowerPoke.js');
+const PowerPoke = require('../utils/PowerPoke.js');
 const pp = new PowerPoke();
 
 /**
@@ -13,6 +13,7 @@ const pp = new PowerPoke();
  */
 router.get('/', async function(req, res, next) {
   res.render('recentactivity', {
+    isEmpty: req.session.Actions === undefined || req.session.Actions === null,
     sessActions: req.session.Actions,
   });
 });

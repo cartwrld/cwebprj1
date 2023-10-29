@@ -35,7 +35,7 @@ const sessOptions = {
 };
 
 
-const homeRouter = require('./routes/home');
+const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
 const pokeBuilderRouter = require('./routes/pokebuilder');
 const teamBuilderRouter = require('./routes/teambuilder');
@@ -43,6 +43,8 @@ const loginRouter = require('./routes/login');
 const recentActivityRouter = require('./routes/recentactivity');
 
 const app = express();
+
+app.set('utils', path.join(__dirname, 'utils'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,57 +62,56 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
 app.use(session(sessOptions));
-app.use(passport.initialize({userProperty: 'currentUser'}));
+// app.use(passport.initialize({userProperty: 'currentUser'}));
 
-app.use('/home', homeRouter);
+app.use('/', indexRouter); // This is what determines the path name
 app.use('/users', usersRouter);
 app.use('/teambuilder', teamBuilderRouter); // This is what determines the path name
 app.use('/pokebuilder', pokeBuilderRouter); // This is what determines the path name
-app.use('/', loginRouter); // This is what determines the path name
 app.use('/recentactivity', recentActivityRouter); // This is what determines the path name
 
 app.use('/bw', express.static(__dirname + '/node_modules/bootswatch/dist'));
 
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-const userSchema = new mongoose.Schema({
-  googleId: String,
-});
-
-userSchema.plugin(findOrCreate);
-
-// eslint-disable-next-line new-cap
-const User = new mongoose.model('User', userSchema);
-passport.use(new GoogleStrategy({
-  clientID: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: 'http://localhost:3000/home',
-  userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
-},
-function(accessToken, refreshToken, profile, cb) {
-  console.log(profile);
-  User.findOrCreate({googleId: profile.id}, function(err, user) {
-    return cb(err, user);
-  });
-},
-));
-
-app.get('/auth', passport.authenticate('google', {scope: ['profile']}));
-
-app.get('/callback/url/',
-    passport.authenticate('google', {failureRedirect: '/login'}),
-    function(req, res) {
-    // Successful authentication, redirect to success.
-      res.redirect('/success');
-    });
+// passport.serializeUser(function(user, done) {
+//   done(null, user.id);
+// });
+// passport.deserializeUser(function(id, done) {
+//   User.findById(id, function(err, user) {
+//     done(err, user);
+//   });
+// });
+//
+// const userSchema = new mongoose.Schema({
+//   googleId: String,
+// });
+//
+// userSchema.plugin(findOrCreate);
+//
+// // eslint-disable-next-line new-cap
+// const User = new mongoose.model('User', userSchema);
+// passport.use(new GoogleStrategy({
+//   clientID: process.env.CLIENT_ID,
+//   clientSecret: process.env.CLIENT_SECRET,
+//   callbackURL: 'http://localhost:3000/home',
+//   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
+// },
+// function(accessToken, refreshToken, profile, cb) {
+//   console.log(profile);
+//   User.findOrCreate({googleId: profile.id}, function(err, user) {
+//     return cb(err, user);
+//   });
+// },
+// ));
+//
+// app.get('/auth', passport.authenticate('google', {scope: ['profile']}));
+//
+// app.get('/callback/url/',
+//     passport.authenticate('google', {failureRedirect: '/'}),
+//     function(req, res) {
+//     // Successful authentication, redirect to success.
+//       res.redirect('/');
+//     });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
