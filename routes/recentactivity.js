@@ -13,7 +13,6 @@ const pp = new PowerPoke();
  */
 router.get('/', async function(req, res, next) {
   res.render('recentactivity', {
-    isEmpty: req.session.Actions === undefined || req.session.Actions === null,
     sessActions: req.session.Actions,
   });
 });

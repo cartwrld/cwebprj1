@@ -64,47 +64,40 @@ async function whosThatPokemon(id) {
  * @route GET /teambuilder/
  * @returns {void} Renders the 'teambuilder' view with the list of filtered Pokémon.
  */
-// router.get('/', passport.authenticate('google', {
-//   // Options and callback function (if needed) go here
-//
-// }), [
-//   query('searchType1')
-//       .if(query('searchType1').exists())
-//       .isIn(POKE_TYPES)
-//       .withMessage('Invalid PokeType - Nice try!'),
-//   query('searchType2')
-//       .if(query('searchType2').exists())
-//       .isIn(POKE_TYPES)
-//       .withMessage('Invalid PokeType - Nice try!'),
-//   query('searchGen')
-//       .if(query('searchGen').exists())
-//       .isIn(['', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-//       .withMessage('Invalid Generation - Nice try!'),
-// ], async function(req, res, next) {
-//   if (!['pokeuser'].includes(req.currentUser.role)) {
-//     res.redirect('/?err=insufficient+permissions');
-//   } else {
-//     const violations = validationResult(req);
-//     const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
-//
-//     if (violations.isEmpty()) {
-//       const poke20List = await genFirst20PokeForTeamOptions();
-//       displayPokes = await pp.outputFilteredPokes(poke20List);
-//     }
-//
-//     res.render('teambuilder', {
-//       sbmtNameID: req.query.searchNameID,
-//       sbmtType1: req.query.searchType1,
-//       sbmtType2: req.query.searchType2,
-//       sbmtGen: req.query.searchGen,
-//
-//       teambuilder: true,
-//       cards: displayPokes,
-//       pokeTeam: pokeTeam,
-//       err: errorMessages,
-//     });
-//   }
-// });
+router.get('/', passport.authenticate('google', {}), [
+  query('searchType1')
+      .if(query('searchType1').exists())
+      .isIn(POKE_TYPES)
+      .withMessage('Invalid PokeType - Nice try!'),
+  query('searchType2')
+      .if(query('searchType2').exists())
+      .isIn(POKE_TYPES)
+      .withMessage('Invalid PokeType - Nice try!'),
+  query('searchGen')
+      .if(query('searchGen').exists())
+      .isIn(['', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+      .withMessage('Invalid Generation - Nice try!'),
+], async function(req, res, next) {
+  const violations = validationResult(req);
+  const errorMessages = violations.formatWith(onlyMsgErrorFormatter).mapped();
+
+  if (violations.isEmpty()) {
+    const poke20List = await genFirst20PokeForTeamOptions();
+    displayPokes = await pp.outputFilteredPokes(poke20List);
+  }
+
+  res.render('teambuilder', {
+    sbmtNameID: req.query.searchNameID,
+    sbmtType1: req.query.searchType1,
+    sbmtType2: req.query.searchType2,
+    sbmtGen: req.query.searchGen,
+
+    teambuilder: true,
+    cards: displayPokes,
+    pokeTeam: pokeTeam,
+    err: errorMessages,
+  });
+});
 
 
 /**

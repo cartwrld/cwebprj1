@@ -215,6 +215,9 @@ router.post('/preview', upload.single('photo'),
       }
 
       sessActions = req.session.Actions;
+      if (!req.session.Actions) {
+        sessActions = [];
+      }
       const JSONAction = createSessionAction('User created a new Pokemon', 'PokeBuilder');
       sessActions.unshift(JSONAction);
       sessActions = sessActions.slice(0, 4);
