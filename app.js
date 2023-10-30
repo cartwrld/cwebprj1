@@ -8,11 +8,15 @@ const passport = require('passport');
 const session = require('express-session');
 const SQLite = require('better-sqlite3');
 const SQLiteStore = require('better-sqlite3-session-store')(session);
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 const dotenv = require('dotenv').config();
+
+const GoogleStrategy = require('passport-google-oidc');
+
+
 const sessOptions = {
   secret: 'gotta catch em all',
-  name: 'session-id',
+  name: 'google-session-id',
   resave: false,
   saveUninitialized: false,
   cookie: {httpOnly: false, maxAge: 1000 * 60 * 60},
@@ -23,7 +27,7 @@ const sessOptions = {
   }),
 };
 
-const homeRouter = require('./routes');
+const homeRouter = require('./routes/');
 const usersRouter = require('./routes/users');
 const pokeBuilderRouter = require('./routes/pokebuilder');
 const teamBuilderRouter = require('./routes/teambuilder');
@@ -45,19 +49,11 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
+
 app.use(session(sessOptions));
 app.use(passport.initialize({userProperty: 'currentUser'}));
 
-app.use('/home', homeRouter);
-app.use('/users', usersRouter);
-app.use('/teambuilder', teamBuilderRouter);
-app.use('/pokebuilder', pokeBuilderRouter);
-app.use('/', loginRouter);
-app.use('/recentactivity', recentActivityRouter);
-
-app.use('/bw', express.static(__dirname + '/node_modules/bootswatch/dist'));
-
-
+// Serialization
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -65,39 +61,59 @@ passport.deserializeUser(function(id, done) {
   done(null, id);
 });
 
+// Google Strategy
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: 'http://localhost:3000/google/callback', // Change this callback URL to match your setup
+  callbackURL: 'http://localhost:3000/powerpoke/signin', // Change this callback URL to match your setup
   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
-  scope: ['profile'],
+  scope: ['profile', 'email'],
 },
-function(accessToken, refreshToken, profile, cb) {
+(accessToken, refreshToken, profile, cb) => {
   if (profile.id) {
     return cb(null, profile);
   }
   return cb();
-},
-));
+}));
 
-app.get('/auth', passport.authenticate('google', {scope: ['profile']}));
+// Middleware to ensure authentication
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    req.session.redirectTo = req.originalUrl; // Store the original URL before the login process
+    res.redirect('/auth'); // Redirect to the login process (which is the start of the Google authentication in your setup)
+  }
+}
 
-app.get('/google/callback', // Change this route to match your setup
-    passport.authenticate('google', {failureRedirect: '/login'}),
+// Protected Routes (just a few examples, apply as needed)
+app.use('/home', checkAuthentication, homeRouter);
+app.use('/users', checkAuthentication, usersRouter);
+app.use('/teambuilder', checkAuthentication, teamBuilderRouter);
+app.use('/pokebuilder', checkAuthentication, pokeBuilderRouter);
+app.use('/recentactivity', checkAuthentication, recentActivityRouter);
+
+// Unprotected Routes
+app.use('/', loginRouter);
+
+// Google Auth Routes
+app.get('/auth', passport.authenticate('google', {scope: ['profile', 'email']}));
+app.get('/powerpoke/signin',
+    passport.authenticate('google', {failureRedirect: '/'}),
     function(req, res) {
-    // Successful authentication, redirect to success.
-      res.redirect('/home');
-    });
-
-app.get('/login', (req, res) => {
-  res.render('login'); // Create a login view for this route
-});
-
-// app.get('/success', (req, res) => {
-//   res.render('success'); // Create a success view for this route
+      const redirectURL = req.session.redirectTo || '/home'; // Use the stored URL or default to home
+      delete req.session.redirectTo; // Clear the stored URL
+      res.redirect(redirectURL);
+    },
+);
+// app.get('/login', (req, res) => {
+//   res.render('login');
 // });
 
-// catch 404 and forward to error handler
+// Static Routes
+app.use('/bw', express.static(__dirname + '/node_modules/bootswatch/dist'));
+
+// Error Handling
 app.use(function(req, res, next) {
   next(createError(404));
 });
